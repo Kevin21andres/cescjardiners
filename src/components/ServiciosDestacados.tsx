@@ -7,19 +7,19 @@ const serveis = [
   {
     title: "Disseny de jardins",
     text: "Transformem la teva idea en un jardí real. Estil, funcionalitat i bellesa.",
-    image: "/images/disseny.jpeg",
+    image: "/images/disseny.webp",
     alt: "Disseny de jardins mediterranis a Tarragona",
   },
   {
     title: "Manteniment professional",
     text: "Cuidem el teu jardí amb visites periòdiques i atenció experta.",
-    image: "/images/manteniment.jpg",
+    image: "/images/manteniment.webp",
     alt: "Manteniment de jardins a Tarragona i voltants",
   },
   {
     title: "Instal·lació de gespa",
     text: "Solucions netes i duradores amb gespa artificial d’alta qualitat.",
-    image: "/images/gespa.jpeg",
+    image: "/images/gespa.webp",
     alt: "Gespa artificial instal·lada per jardiners a Tarragona",
   },
 ];

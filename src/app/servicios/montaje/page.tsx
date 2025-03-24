@@ -7,28 +7,28 @@ import { Droplet, Sprout, TreePalm, Ruler } from "lucide-react"; // npm install 
 const serveis = [
   {
     icon: <Sprout className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/seleccio-plantes.jpeg",
+    img: "/images/seleccio-plantes.webp",
     alt: "Selecció de plantes",
     title: "Selecció de plantes",
     text: "Triem espècies adaptades al clima, el tipus de sòl i les preferències estètiques de cada client.",
   },
   {
     icon: <Ruler className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/instalacio-gespa1.jpeg",
+    img: "/images/instalacio-gespa1.webp",
     alt: "Instal·lació de gespa",
     title: "Instal·lació de gespa",
     text: "Instal·lem gespa natural o artificial amb una preparació acurada del terreny i un acabat professional.",
   },
   {
     icon: <TreePalm className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/tot-tipus.jpeg",
+    img: "/images/tot-tipus.webp",
     alt: "Plantació de vegetació",
     title: "Plantació de tot tipus",
     text: "Plantem arbres, arbustos, flors i tanques vegetals segons el projecte i l’estil desitjat.",
   },
   {
     icon: <Droplet className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/instalacio-reg.jpeg",
+    img: "/images/instalacio-reg.webp",
     alt: "Instal·lació de reg",
     title: "Instal·lació de reg",
     text: "Sistemes de reg automàtic i eficient per optimitzar l’ús d’aigua i garantir la salut del jardí.",

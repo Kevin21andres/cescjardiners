@@ -6,18 +6,18 @@ import { useState } from "react";
 import Modal from "react-modal";
 
 const images = [
-  { src: "/images/manteniment.jpg", alt: "Projecte de jardí" },
-  { src: "/images/manteniment-piscines.jpeg", alt: "Piscina envoltada de gespa" },
-  { src: "/images/manteniment-comunitat.jpeg", alt: "Manteniment de comunitat" },
-  { src: "/images/zona-jardi.jpeg", alt: "Zona enjardinada mediterrània" },
-  { src: "/images/poda-comunitat.jpeg", alt: "Detall de poda i cura" },
-  { src: "/images/gespa.jpeg", alt: "Disseny de jardí modern" },
-  { src: "/images/piscina-detall.jpeg", alt: "Detall de piscina neta" },
-  { src: "/images/escocell.jpeg", alt: "Escocell net i ordenat" },
-  { src: "/images/entrada-jardi.jpeg", alt: "Entrada jardí" },
-  { src: "/images/jardi-entrada.jpeg", alt: "Entrada enjardinada elegant" },
-  { src: "/images/equip.jpg", alt: "Equip de treball en acció" },
-  { src: "/images/retirada-arbre.jpeg", alt: "Retirada d'arbre" },
+  { src: "/images/manteniment.webp", alt: "Projecte de jardí" },
+  { src: "/images/manteniment-piscines.webp", alt: "Piscina envoltada de gespa" },
+  { src: "/images/manteniment-comunitat.webp", alt: "Manteniment de comunitat" },
+  { src: "/images/zona-jardi.webp", alt: "Zona enjardinada mediterrània" },
+  { src: "/images/poda-comunitat.webp", alt: "Detall de poda i cura" },
+  { src: "/images/gespa.webp", alt: "Disseny de jardí modern" },
+  { src: "/images/piscina-detall.webp", alt: "Detall de piscina neta" },
+  { src: "/images/escocell.webp", alt: "Escocell net i ordenat" },
+  { src: "/images/entrada-jardi.webp", alt: "Entrada jardí" },
+  { src: "/images/jardi-entrada.webp", alt: "Entrada enjardinada elegant" },
+  { src: "/images/equip.webp", alt: "Equip de treball en acció" },
+  { src: "/images/retirada-arbre.webp", alt: "Retirada d'arbre" },
 ];
 
 Modal.setAppElement("body");

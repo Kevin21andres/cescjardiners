@@ -39,7 +39,7 @@ export default function Nosotros() {
         </div>
         <div>
           <Image
-            src="/images/origens.jpeg"
+            src="/images/origens.webp"
             alt="Equip de Cesc Jardiners"
             width={500}
             height={350}
@@ -64,7 +64,7 @@ export default function Nosotros() {
         </div>
         <div className="order-1 md:order-1">
           <Image
-            src="/images/treballantjardi.jpg"
+            src="/images/treballantjardi.webp"
             alt="Treballant al jardí"
             width={500}
             height={350}

@@ -38,7 +38,7 @@ export const metadata = {
     siteName: "Cesc Jardiners",
     images: [
       {
-        url: "https://cescjardiners.cat/images/manteniment.jpg", // Substitueix per la teva imatge
+        url: "https://cescjardiners.cat/images/manteniment.webp", // Substitueix per la teva imatge
         width: 1200,
         height: 630,
         alt: "Jardí mediterrani creat per Cesc Jardiners",

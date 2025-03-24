@@ -7,47 +7,47 @@ const serveis = [
   {
     title: "Disseny de jardins",
     text: "Dissenyem el teu jardí totalment personalitzat, amb plànols a escala i suport tecnològic. Cada detall s’adapta als teus gustos i a l'entorn natural.",
-    img: "/images/disseny.jpeg",
+    img: "/images/disseny.webp",
   },
   {
     title: "Manteniment de jardins",
     text: "El nostre objectiu és que el teu jardí estigui sempre en les millors condicions. Comptem amb anys d’experiència i atenció constant per garantir-ho.",
-    img: "/images/manteniment.jpg",
+    img: "/images/manteniment.webp",
   },
   {
     title: "Tractaments fitosanitaris",
     text: "Una part fonamental del manteniment del jardí és aplicar tractaments fitosanitaris eficaços. Som especialistes en la cura d’arbres i plantes.",
-    img: "/images/tractaments-fitosanitaris.jpeg",
+    img: "/images/tractaments-fitosanitaris.webp",
   },
   {
     title: "Muntatge de jardins",
     text: "Executem cada muntatge segons un pressupost optimitzat per assolir els objectius del teu jardí. La nostra experiència assegura resultats excel·lents.",
-    img: "/images/muntatge.jpeg",
+    img: "/images/muntatge.webp",
   },
   {
     title: "Poda d’arbres",
     text: "A partir de l’experiència i el coneixement sobre fisiologia i morfologia dels arbres, estem capacitats per fer podes segures i efectives.",
-    img: "/images/origens.jpeg",
+    img: "/images/origens.webp",
   },
   {
     title: "Instal·lació de gespa",
     text: "Disposem de la maquinària adequada per a la instal·lació de gespa artificial o natural. Oferim una àmplia gamma de mostres per adaptar-nos a les teves preferències.",
-    img: "/images/instalacio-gespa.jpeg",
+    img: "/images/instalacio-gespa.webp",
   },
   {
     title: "Manteniment de piscines",
     text: "També som experts en manteniment de piscines. Amb més de 30 anys d’experiència, assegurem un aspecte ideal i saludable per a la teva piscina.",
-    img: "/images/manteniment-piscines.jpeg",
+    img: "/images/manteniment-piscines.webp",
   },
   {
     title: "Tractaments d’aigua",
     text: "Oferim productes químics actualitzats i segurs per garantir el tractament correcte de l’aigua i una presència neta i cristal·lina.",
-    img: "/images/tractaments-aigua.jpeg",
+    img: "/images/tractaments-aigua.webp",
   },
   {
     title: "Reparació de piscines",
     text: "Comptem amb la preparació i experiència per afrontar qualsevol desperfecte o problema que pugui sorgir a la teva piscina.",
-    img: "/images/reparacio_piscina.jpg",
+    img: "/images/reparacio_piscina.webp",
   },
 ];
 
