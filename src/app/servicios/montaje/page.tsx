@@ -102,7 +102,7 @@ export default function MontatgeJardins() {
       {/* Call to Action */}
       <div className="text-center pt-8">
         <a
-          href="/contacte"
+          href="/contacto"
           className="inline-block px-6 py-3 bg-forest-green text-white font-medium rounded-full shadow-md hover:bg-green-700 transition"
         >
           Demana pressupost
