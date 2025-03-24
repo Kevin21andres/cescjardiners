@@ -121,7 +121,7 @@ export default function Navbar() {
                   <Link
                     href="/servicios"
                     className={`block text-sm font-medium hover:text-brown-sugar ${
-                      pathname.startsWith("/servicios") ? "underline underline-offset-4" : ""
+                      pathname?.startsWith("/servicios") ? "underline underline-offset-4" : ""
                     }`}
                     onClick={() => setMenuOpen(false)}
                   >
