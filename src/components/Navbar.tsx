@@ -61,7 +61,7 @@ export default function Navbar() {
                     <Link
                       href="/servicios"
                       className={`flex items-center gap-1 hover:text-brown-sugar ${
-                        pathname.startsWith("/servicios")
+                        (pathname ?? "").startsWith("/servicios")
                           ? "underline underline-offset-4"
                           : ""
                       }`}
