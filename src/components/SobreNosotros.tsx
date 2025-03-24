@@ -31,7 +31,7 @@ const SobreNosaltres = () => (
         </p>
         <div className="mt-6">
           <Link
-            href="/nosaltres"
+            href="/nosotros"
             title="Coneix més sobre Cesc Jardiners"
             aria-label="Més informació sobre Cesc Jardiners, jardineria a Tarragona"
             className="inline-block bg-forest-green text-white px-6 py-2 rounded hover:bg-brown-sugar transition"
@@ -49,7 +49,7 @@ const SobreNosaltres = () => (
         viewport={{ once: true }}
       >
         <Image
-          src="/images/equip.jpg"
+          src="/images/equip.webp"
           alt="Equip de jardiners de Cesc Jardiners treballant a Tarragona"
           title="Jardiners professionals a Tarragona - Cesc Jardiners"
           width={600}
