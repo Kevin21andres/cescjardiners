@@ -13,12 +13,54 @@ const raleway = Raleway({
 
 
 export const metadata = {
-  title: "Cesc Jardiners | La jardineria al teu costat",
-  description: "Serveis professionals de jardineria, paisatgisme i manteniment.",
+  title: "Jardiner a Tarragona | Cesc Jardiners | Disseny i Manteniment de Jardins",
+  description:
+    "Cesc Jardiners ofereix serveis professionals de jardineria a Tarragona, Reus, Cambrils i voltants. Especialistes en manteniment de jardins, gespa artificial, poda i reg automàtic.",
+  keywords: [
+    "jardiner Tarragona",
+    "jardineria Reus",
+    "manteniment jardins Cambrils",
+    "paisatgisme Tarragona",
+    "gespa artificial",
+    "poda arbres Tarragona",
+    "reg automàtic",
+    "serveis jardiners",
+    "empresa jardineria tarragona",
+  ],
   icons: {
-    icon: "./images/logocj.png",
+    icon: "/images/logocj.png",
+  },
+  openGraph: {
+    title: "Cesc Jardiners | Jardineria a Tarragona i voltants",
+    description:
+      "Serveis de jardineria de confiança a Tarragona. Disseny, manteniment i cura de jardins mediterranis. Demana pressupost avui mateix!",
+    url: "https://cescjardiners.cat",
+    siteName: "Cesc Jardiners",
+    images: [
+      {
+        url: "https://cescjardiners.cat/images/manteniment.jpg", // Substitueix per la teva imatge
+        width: 1200,
+        height: 630,
+        alt: "Jardí mediterrani creat per Cesc Jardiners",
+      },
+    ],
+    locale: "ca_ES",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
+  alternates: {
+    canonical: "https://cescjardiners.cat",
   },
 };
+
 
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

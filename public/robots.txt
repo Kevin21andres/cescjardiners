@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://cescjardiners.cat
+
+# Sitemaps
+Sitemap: https://cescjardiners.cat/sitemap.xml

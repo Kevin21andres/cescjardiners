@@ -31,28 +31,35 @@ export default function Navbar() {
   }, [hovering]);
 
   return (
-    <nav className="bg-black text-white sticky top-0 z-50 shadow-md border-b border-white/10">
+    <nav className="bg-black text-white sticky top-0 z-50 shadow-md border-b border-white/10" role="navigation" aria-label="Menú principal">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/images/logocj.png" alt="Cesc Jardiners Logo" width={40} height={40} />
+        {/* Logo amb descripció SEO */}
+        <Link href="/" className="flex items-center gap-2" aria-label="Inici - Cesc Jardiners, jardiner a Tarragona">
+          <Image
+            src="/images/logocj.png"
+            alt="Logotip de Cesc Jardiners"
+            width={40}
+            height={40}
+            priority
+          />
         </Link>
 
-        {/* Mobile button */}
+        {/* Botó menú mòbil */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden text-white"
+          aria-label={menuOpen ? "Tancar menú" : "Obrir menú"}
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
 
-        {/* Menu desktop */}
+        {/* Menú escriptori */}
         <ul className="hidden md:flex gap-6 text-sm font-medium tracking-wide relative">
           {navItems.map((item) => {
             if (item.label === "Fotografies") {
               return (
                 <React.Fragment key="serveis">
-                  {/* Dropdown: Serveis */}
+                  {/* Serveis amb desplegable */}
                   <li
                     className="relative"
                     onMouseEnter={() => setHovering(true)}
@@ -60,10 +67,10 @@ export default function Navbar() {
                   >
                     <Link
                       href="/servicios"
+                      title="Serveis de jardineria a Tarragona"
+                      aria-label="Serveis de jardineria"
                       className={`flex items-center gap-1 hover:text-brown-sugar ${
-                        (pathname ?? "").startsWith("/servicios")
-                          ? "underline underline-offset-4"
-                          : ""
+                        pathname?.startsWith("/serveis") ? "underline underline-offset-4" : ""
                       }`}
                     >
                       Serveis <ChevronDown className="w-4 h-4" />
@@ -73,6 +80,7 @@ export default function Navbar() {
                         <Link
                           href="/servicios/montaje"
                           className="block px-6 py-3 whitespace-nowrap hover:bg-forest-green hover:text-white transition-colors"
+                          title="Muntatge de jardins professionals"
                         >
                           Muntatge de jardins
                         </Link>
@@ -84,6 +92,7 @@ export default function Navbar() {
                   <li key={item.href}>
                     <Link
                       href={item.href}
+                      title="Exemples de treballs de jardineria"
                       className={`hover:text-brown-sugar ${
                         pathname === item.href ? "underline underline-offset-4" : ""
                       }`}
@@ -99,6 +108,7 @@ export default function Navbar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  title={`${item.label} - Cesc Jardiners`}
                   className={`hover:text-brown-sugar ${
                     pathname === item.href ? "underline underline-offset-4" : ""
                   }`}
@@ -111,17 +121,18 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* Menu mobile */}
+      {/* Menú mòbil */}
       {menuOpen && (
-        <div className="md:hidden px-6 pb-6 space-y-4">
+        <div className="md:hidden px-6 pb-6 space-y-4" aria-label="Menú mòbil">
           {navItems.map((item) => {
             if (item.label === "Fotografies") {
               return (
                 <React.Fragment key="serveis-mob">
                   <Link
-                    href="/servicios"
+                    href="/serveis"
+                    title="Serveis de jardineria"
                     className={`block text-sm font-medium hover:text-brown-sugar ${
-                      pathname?.startsWith("/servicios") ? "underline underline-offset-4" : ""
+                      pathname?.startsWith("/serveis") ? "underline underline-offset-4" : ""
                     }`}
                     onClick={() => setMenuOpen(false)}
                   >
@@ -129,9 +140,10 @@ export default function Navbar() {
                   </Link>
                   <Link
                     href={item.href}
-                    className={`flex items-center gap-1 hover:text-brown-sugar ${
-                      (pathname ?? "").startsWith("/servicios") ? "underline underline-offset-4" : ""
-                    }`}                    
+                    title="Veure fotografies"
+                    className={`block text-sm font-medium hover:text-brown-sugar ${
+                      pathname === item.href ? "underline underline-offset-4" : ""
+                    }`}
                     onClick={() => setMenuOpen(false)}
                   >
                     {item.label}
@@ -144,6 +156,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
+                title={`${item.label} - Cesc Jardiners`}
                 className={`block text-sm font-medium hover:text-brown-sugar ${
                   pathname === item.href ? "underline underline-offset-4" : ""
                 }`}
