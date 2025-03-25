@@ -31,10 +31,18 @@ export default function Navbar() {
   }, [hovering]);
 
   return (
-    <nav className="bg-black text-white sticky top-0 z-50 shadow-md border-b border-white/10" role="navigation" aria-label="Menú principal">
+    <nav
+      className="bg-black text-white sticky top-0 z-50 shadow-md border-b border-white/10"
+      role="navigation"
+      aria-label="Menú principal"
+    >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo amb descripció SEO */}
-        <Link href="/" className="flex items-center gap-2" aria-label="Inici - Cesc Jardiners, jardiner a Tarragona">
+        {/* Logo */}
+        <Link
+          href="/"
+          aria-label="Cesc Jardiners - jardiner a Tarragona"
+          className="flex items-center gap-2"
+        >
           <Image
             src="/images/logocj.png"
             alt="Logotip de Cesc Jardiners"
@@ -44,7 +52,7 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Botó menú mòbil */}
+        {/* Botó mòbil */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="md:hidden text-white"
@@ -54,12 +62,12 @@ export default function Navbar() {
         </button>
 
         {/* Menú escriptori */}
-        <ul className="hidden md:flex gap-6 text-sm font-medium tracking-wide relative">
+        <ul className="hidden md:flex gap-6 text-sm font-medium tracking-wide items-center" role="menubar">
           {navItems.map((item) => {
             if (item.label === "Fotografies") {
               return (
                 <React.Fragment key="serveis">
-                  {/* Serveis amb desplegable */}
+                  {/* Serveis desplegable */}
                   <li
                     className="relative"
                     onMouseEnter={() => setHovering(true)}
@@ -67,16 +75,20 @@ export default function Navbar() {
                   >
                     <Link
                       href="/servicios"
-                      title="Serveis de jardineria a Tarragona"
-                      aria-label="Serveis de jardineria"
+                      aria-haspopup="true"
+                      aria-expanded={showDropdown}
                       className={`flex items-center gap-1 hover:text-brown-sugar ${
-                        pathname?.startsWith("/serveis") ? "underline underline-offset-4" : ""
+                        pathname?.startsWith("/servicios") ? "underline underline-offset-4" : ""
                       }`}
                     >
                       Serveis <ChevronDown className="w-4 h-4" />
                     </Link>
                     {showDropdown && (
-                      <div className="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-md z-50">
+                      <div
+                        className="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-md z-50"
+                        role="menu"
+                        tabIndex={-1}
+                      >
                         <Link
                           href="/servicios/montaje"
                           className="block px-6 py-3 whitespace-nowrap hover:bg-forest-green hover:text-white transition-colors"
@@ -123,16 +135,16 @@ export default function Navbar() {
 
       {/* Menú mòbil */}
       {menuOpen && (
-        <div className="md:hidden px-6 pb-6 space-y-4" aria-label="Menú mòbil">
+        <div className="md:hidden px-6 pb-6 space-y-4" aria-label="Menú per a dispositius mòbils">
           {navItems.map((item) => {
             if (item.label === "Fotografies") {
               return (
                 <React.Fragment key="serveis-mob">
                   <Link
-                    href="/serveis"
+                    href="/servicios"
                     title="Serveis de jardineria"
                     className={`block text-sm font-medium hover:text-brown-sugar ${
-                      pathname?.startsWith("/serveis") ? "underline underline-offset-4" : ""
+                      pathname?.startsWith("/servicios") ? "underline underline-offset-4" : ""
                     }`}
                     onClick={() => setMenuOpen(false)}
                   >
