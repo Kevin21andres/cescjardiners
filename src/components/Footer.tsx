@@ -33,7 +33,7 @@ const Footer = () => (
             { href: "/servicios", label: "Serveis" },
             { href: "/fotografias", label: "Fotografies" },
             { href: "/contacto", label: "Contacte" },
-            { href: "/politica-de-privacitat", label: "Política de privacitat" },
+            { href: "/politica-de-privacidad", label: "Política de privacitat" },
           ].map(({ href, label }) => (
             <li key={href}>
               <Link href={href} className="hover:text-brown-sugar transition-colors duration-200">
