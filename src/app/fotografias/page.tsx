@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 
 const images = [
@@ -25,17 +25,24 @@ Modal.setAppElement("body");
 export default function Fotografies() {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeImage, setActiveImage] = useState<{ src: string; alt: string } | null>(null);
+  useEffect(() => {
+  document.body.style.overflow = modalOpen
+    ? "hidden"
+    : "";
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [modalOpen]);
 
   const openModal = (img: { src: string; alt: string }) => {
     setActiveImage(img);
     setModalOpen(true);
-    document.body.style.overflow = "hidden";
   };
 
   const closeModal = () => {
     setModalOpen(false);
     setActiveImage(null);
-    document.body.style.overflow = "auto";
   };
 
   return (
