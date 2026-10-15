@@ -51,7 +51,8 @@ export default function LocalizedContactForm({locale}:{locale:Locale}){
 
   function change(event:ChangeEvent<HTMLInputElement|HTMLTextAreaElement>){
     const field=event.currentTarget.name as keyof FormValues;
-    setForm(old=>({...old,[field]:event.currentTarget.value}));
+    const value=event.currentTarget.value;
+    setForm(old=>({...old,[field]:value}));
   }
   async function submit(event:FormEvent<HTMLFormElement>){
     event.preventDefault();

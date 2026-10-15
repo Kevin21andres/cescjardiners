@@ -72,7 +72,7 @@ export default async function Home({params}:Props){
             {offerings.map((service,index)=>{
               const name=service.id==="montage"?t.nav.montage:t.service[service.id as "garden"|"pools"|"irrigation"].title;
               const desc=service.id==="montage"?t.montage.intro:t.service[service.id as "garden"|"pools"|"irrigation"].description;
-              return <Link key={service.id} href={routeFor(locale,service.id)} className={`group relative block overflow-hidden bg-deep-forest text-white md:col-span-${index===0||index===3?"7":"5"}`} aria-label={name}>
+              return <Link key={service.id} href={routeFor(locale,service.id)} className={`group relative block overflow-hidden bg-deep-forest text-white ${index===0||index===3?"md:col-span-7":"md:col-span-5"}`} aria-label={name}>
                 <div className="relative h-[390px] sm:h-[500px]">
                   <Image src={service.img} alt={name} fill sizes="(max-width: 768px) 100vw, 60vw" className="object-cover transition-transform duration-700 group-hover:scale-105"/>
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071E16]/90 via-transparent to-black/10"/>
