@@ -52,7 +52,73 @@ async function check(){
   assert(homepage.includes('href="/es"')&&homepage.includes('href="/ca"'),"Language links are missing");
   const interior=await (await fetch(origin+"/ca/serveis/manteniment-jardins")).text();
   assert(interior.includes('href="/es/servicios/mantenimiento-jardines"'),"Language switcher should preserve service page");
-  console.log(`PASS: ${count} translated routes, HTML language, language links and legacy redirect`);
+  // Verificacions funcionals i SEO que no requereixen credencials de serveis externs.
+  const codes=["ca","es","en"];
+  const legalRoutes=[
+    "/ca/avis-legal","/es/aviso-legal","/en/legal-notice",
+  ];
+  for (const path of legalRoutes) {
+    const r=await fetch(origin+path);
+    assert.equal(r.status,200,`${path} legal content missing`);
+    const h=await r.text();
+    assert(h.includes("Francisco Moreno Aguilar"),`${path} legal owner data missing`);
+  }
+  const languageRouteExamples={
+    ca:"/ca/serveis/manteniment-jardins",
+    es:"/es/servicios/mantenimiento-jardines",
+    en:"/en/services/garden-maintenance",
+  };
+  let seoChecked=0;
+  for(const [lang, url] of Object.entries(languageRouteExamples)){
+    const response=await fetch(origin+url);
+    const h=await response.text();
+    const full=`https://cescjardiners.cat${url}`;
+    assert(h.includes(`rel="canonical" href="${full}"`),`${url}: wrong canonical`);
+    assert(h.includes(`hreflang="ca"`) && h.includes(`hreflang="es"`) && h.includes(`hreflang="en"`),`${url}: missing hreflang`);
+    assert(h.includes('"@type":"Service"'),`${url}: missing Schema.org Service`);
+    assert(h.includes('<h1'),`${url}: missing H1`);
+    for(const target of codes){
+      assert(h.includes(`href="${languageRouteExamples[target]}"`),`${url}: switcher lost equivalent page ${target}`);
+    }
+    seoChecked++;
+  }
+  const sitemapResponse=await fetch(origin+"/sitemap.xml");
+  assert.equal(sitemapResponse.status,200,"sitemap.xml should exist");
+  const sitemap=await sitemapResponse.text();
+  for(const lang of codes){
+    assert(sitemap.includes(`https://cescjardiners.cat/${lang}`),"Missing "+lang+" sitemap");
+  }
+  const robotsResponse=await fetch(origin+"/robots.txt");
+  assert.equal(robotsResponse.status,200,"robots.txt should exist");
+  const robots=await robotsResponse.text();
+  assert(robots.includes("https://cescjardiners.cat/sitemap.xml"),"robots.txt missing sitemap reference");
+
+  // Les referències estàtiques d'imatges han de correspondre a fitxers reals.
+  let assetCount=0;
+  const walk=(path)=>{
+    for(const item of fs.readdirSync(path,{withFileTypes:true})){
+      const full=path+"/"+item.name;
+      if(item.isDirectory())walk(full);
+      else if(/\\.(tsx?|jsx?)$/.test(item.name)){
+        const code=fs.readFileSync(full,"utf8");
+        for(const match of code.matchAll(/["'](\\/images\\/[^"']+)["']/g)){
+          assert(fs.existsSync("public"+match[1]),`Asset missing: ${match[1]} in ${full}`);
+          assetCount++;
+        }
+      }
+    }
+  };
+  walk("src");
+  assert(assetCount>=30,"Image asset check found too few references");
+
+  const missing=await fetch(origin+"/en/services/does-not-exist",{redirect:"manual"});
+  assert.equal(missing.status,404,"Unknown service must return HTTP 404");
+  const missingBody=await missing.text();
+  assert(missingBody.includes("This path doesn"),"Localized 404 should have friendly English content");
+  const getContact=await fetch(origin+"/api/contact",{redirect:"manual"});
+  assert.equal(getContact.status,405,"GET /api/contact must be rejected");
+
+  console.log(`PASS: ${count} localized routes; ${seoChecked} Service schemas; SEO, sitemap, 404, contact method and ${assetCount} static image references verified`);
 }
 try {await check();}
 finally {server.kill("SIGTERM");await wait(400);}
