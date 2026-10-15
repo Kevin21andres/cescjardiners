@@ -33,3 +33,13 @@ For a suspected vulnerability, contact the site owner privately rather than open
 - [ ] Upstash configured and `RATE_LIMIT_REQUIRED=true`; WAF enabled.
 - [ ] Privacy and legal notices reviewed/approved by the owner.
 - [ ] Deployment and rollback plan confirmed; secrets never committed.
+
+## Build-time dependency advisories
+
+The application dependencies used in production are gated by `npm audit --omit=dev --audit-level=high`.
+The October 2026 full audit still flags the `eslint-config-next` development tooling chain
+(`@next/eslint-plugin-next → fast-glob → micromatch → braces`) at high severity.
+This tooling is installed for CI/development, not shipped as a production runtime dependency.
+Do **not** treat this as a clean full-dependency audit or claim zero vulnerabilities.
+Review upstream patched versions and upgrade the lint toolchain when a compatible fix is available;
+do not downgrade the Next.js 16 lint integration solely to silence the report.
