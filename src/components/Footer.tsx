@@ -1,50 +1,55 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Mail, MapPin, Phone, Leaf } from "lucide-react";
-import { FaTiktok, FaInstagram } from "react-icons/fa";
-
-const links = [
-  { href: "/", label: "Inici" },
-  { href: "/nosotros", label: "Nosaltres" },
-  { href: "/servicios", label: "Serveis" },
-  { href: "/fotografias", label: "Fotografies" },
-  { href: "/contacto", label: "Contacte" },
-];
+import { ArrowUpRight, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 text-white">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="lg:col-span-2">
-          <p className="mb-4 flex items-center gap-2 text-2xl font-extrabold"><Leaf className="text-green-400" aria-hidden="true" />Cesc Jardiners</p>
-          <p className="max-w-md text-sm leading-7 text-white/75">Més de 35 anys transformant espais verds. Disseny, muntatge i manteniment de jardins i piscines a Tarragona i voltants.</p>
-          <Link href="/contacto" className="mt-6 inline-block rounded-full border border-green-400 px-5 py-2 text-sm font-semibold text-green-300 transition hover:bg-green-500 hover:text-white">Demana pressupost</Link>
-        </div>
-        <div>
-          <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-green-300">Enllaços</h2>
-          <ul className="space-y-3 text-sm">
-            {links.map(({ href, label }) => <li key={href}><Link href={href} className="text-white/80 hover:text-green-300">{label}</Link></li>)}
-          </ul>
-        </div>
-        <div>
-          <h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-green-300">Contacte</h2>
-          <div className="space-y-3 text-sm text-white/80">
-            <p className="flex items-start gap-2"><MapPin size={18} aria-hidden="true" />Tarragona, Catalunya</p>
-            <a href="mailto:cescjardiners@gmail.com" className="flex items-start gap-2 break-all hover:text-green-300"><Mail size={18} aria-hidden="true" />cescjardiners@gmail.com</a>
-            <a href="tel:+34638158473" className="flex items-center gap-2 hover:text-green-300"><Phone size={18} aria-hidden="true" />+34 638 15 84 73</a>
+    <footer className="overflow-hidden bg-[#10291F] text-white">
+      <div className="mx-auto max-w-[1440px] px-5 pt-20 sm:px-10 sm:pt-24 lg:px-16">
+        <div className="grid gap-14 border-b border-white/15 pb-20 lg:grid-cols-[1.4fr_.6fr_.7fr] lg:gap-20">
+          <div>
+            <div className="flex items-center gap-3">
+              <Image src="/images/logocj.png" alt="" width={50} height={50} className="h-12 w-12 object-contain" />
+              <span className="site-eyebrow text-[#E4C9A8]">Cesc Jardiners</span>
+            </div>
+            <h2 className="font-editorial mt-9 max-w-md text-[clamp(3.2rem,5.5vw,6rem)] leading-[1.02]">
+              Fem créixer <span className="italic text-[#C7D3BF]">bones històries.</span>
+            </h2>
+            <Link href="/contacto" className="editorial-link mt-9 text-[#E4C9A8]">Fem realitat el teu jardí <ArrowUpRight size={17} aria-hidden="true"/></Link>
           </div>
-          <div className="mt-6 flex gap-5">
-            <a href="https://www.instagram.com/cesc.jardiners/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Cesc Jardiners" className="hover:text-green-300"><FaInstagram aria-hidden="true" size={22} /></a>
-            <a href="https://www.tiktok.com/@cescjardiners" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Cesc Jardiners" className="hover:text-green-300"><FaTiktok aria-hidden="true" size={22} /></a>
+          <div>
+            <p className="site-eyebrow mb-7 text-[#D3B38D]">Explora</p>
+            <div className="flex flex-col gap-4 text-sm text-white/80">
+              <Link href="/" className="hover:text-white">Inici</Link>
+              <Link href="/nosotros" className="hover:text-white">Nosaltres</Link>
+              <Link href="/servicios" className="hover:text-white">Serveis</Link>
+              <Link href="/fotografias" className="hover:text-white">Projectes</Link>
+              <Link href="/contacto" className="hover:text-white">Contacte</Link>
+            </div>
+          </div>
+          <div>
+            <p className="site-eyebrow mb-7 text-[#D3B38D]">Contacte</p>
+            <div className="flex flex-col gap-5 text-sm leading-6 text-white/80">
+              <p className="flex gap-3"><MapPin size={17} className="mt-1 shrink-0" aria-hidden="true"/> Tarragona, Catalunya</p>
+              <a href="tel:+34638158473" className="flex gap-3 hover:text-white"><Phone size={17} className="mt-1 shrink-0" aria-hidden="true"/> +34 638 15 84 73</a>
+              <a href="mailto:cescjardiners@gmail.com" className="flex gap-3 break-all hover:text-white"><Mail size={17} className="mt-1 shrink-0" aria-hidden="true"/> cescjardiners@gmail.com</a>
+            </div>
+            <div className="mt-8 flex items-center gap-5">
+              <a href="https://www.instagram.com/cesc.jardiners/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Cesc Jardiners" className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 transition hover:bg-white hover:text-deep-forest"><Instagram size={20} aria-hidden="true"/></a>
+              <a href="https://www.tiktok.com/@cescjardiners" target="_blank" rel="noopener noreferrer" aria-label="TikTok de Cesc Jardiners" className="flex h-11 w-11 items-center justify-center rounded-full border border-white/30 transition hover:bg-white hover:text-deep-forest"><FaTiktok size={18} aria-hidden="true"/></a>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="border-t border-white/10 px-5 py-6 text-center text-xs text-white/65">
-        <p>© {new Date().getFullYear()} Cesc Jardiners · Tots els drets reservats</p>
-        <div className="mt-3 flex flex-wrap justify-center gap-x-5 gap-y-2">
-          <Link href="/avis-legal" className="underline-offset-4 hover:underline">Avís legal</Link>
-          <Link href="/politica-de-privacidad" className="underline-offset-4 hover:underline">Privacitat</Link>
-          <Link href="/politica-de-cookies" className="underline-offset-4 hover:underline">Cookies</Link>
+        <div className="flex flex-col gap-4 py-7 text-xs text-white/55 md:flex-row md:items-center md:justify-between">
+          <span>© {new Date().getFullYear()} Cesc Jardiners · Fet amb respecte per la natura.</span>
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            <Link href="/avis-legal" className="hover:text-white">Avís legal</Link>
+            <Link href="/politica-de-privacidad" className="hover:text-white">Privacitat</Link>
+            <Link href="/politica-de-cookies" className="hover:text-white">Cookies</Link>
+          </div>
         </div>
+        <p aria-hidden="true" className="font-editorial -mb-[.23em] select-none whitespace-nowrap text-center text-[clamp(4.5rem,16.3vw,16rem)] leading-none tracking-[-.065em] text-[#2C493C]">Cesc Jardiners</p>
       </div>
     </footer>
   );
