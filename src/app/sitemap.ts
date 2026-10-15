@@ -1,24 +1,12 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/seo";
-import { serviceSlugs } from "@/lib/service-pages";
+import { locales, pageIds, type PageId, type Locale } from "@/lib/i18n";
+import { localizedUrl } from "@/lib/seo-localized";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = [
-    "/",
-    "/nosotros",
-    "/servicios",
-    "/servicios/montaje",
-    ...serviceSlugs.map((slug) => `/servicios/${slug}`),
-    "/fotografias",
-    "/contacto",
-    "/politica-de-privacidad",
-    "/politica-de-cookies",
-    "/avis-legal",
-  ];
-
-  return routes.map((route) => ({
-    url: new URL(route, SITE_URL).toString(),
-    changeFrequency: route === "/" ? "weekly" : "monthly",
-    priority: route === "/" ? 1 : route.startsWith("/servicios/") ? 0.8 : 0.6,
-  }));
+export default function sitemap():MetadataRoute.Sitemap{
+  return pageIds.flatMap((page:PageId)=>locales.map((locale:Locale)=>({
+    url:localizedUrl(locale,page),
+    alternates:{languages:Object.fromEntries([...locales.map(lang=>[lang,localizedUrl(lang,page)]),["x-default",localizedUrl("ca",page)]])},
+    changeFrequency:page==="home"?"weekly" as const:"monthly" as const,
+    priority:page==="home"?1:page==="services"?0.9:0.7,
+  })));
 }
