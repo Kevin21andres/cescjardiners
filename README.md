@@ -1,6 +1,6 @@
 # Cesc Jardiners — web corporativa
 
-Web en català de **Cesc Jardiners**, desenvolupada amb Next.js (App Router), TypeScript i Tailwind CSS.
+Web corporativa trilingüe (**català, castellà i anglès**) de **Cesc Jardiners**, desenvolupada amb Next.js (App Router), TypeScript i Tailwind CSS v4.
 
 ## Requisits
 
