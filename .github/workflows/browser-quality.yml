@@ -3,7 +3,6 @@ name: Browser and Lighthouse quality
 on:
   push:
     branches: ["feat/web-quality-seo-accessibility-20261015"]
-  pull_request:
 
 permissions:
   contents: read

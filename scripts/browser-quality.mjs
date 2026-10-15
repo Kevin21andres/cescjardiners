@@ -75,7 +75,7 @@ try{
   const ctx=await browser.newContext({viewport:{width:1280,height:800},reducedMotion:"reduce"});
   const page=await ctx.newPage();
   await page.goto(origin+"/ca/serveis/manteniment-jardins");
-  await page.getByRole("navigation",{name:"Idioma"}).first().getByRole("link",{name:"English"}).click();
+  await page.getByRole("navigation",{name:"Idioma",exact:true}).getByRole("link",{name:"English",exact:true}).click();
   assert(page.url().endsWith("/en/services/garden-maintenance"),"Language switch did not preserve service");
   await page.goto(origin+"/en/projects");
   await page.getByRole("button",{name:/Enlarge photograph/}).first().click();

@@ -15,7 +15,7 @@ const photos=[
 export default function LocalizedGallery({locale}:{locale:Locale}){
  const t=copy[locale].gallery;
  const [active,setActive]=useState<number|null>(null);
- useEffect(()=>{Modal.setAppElement("body");},[]);
+ useEffect(()=>{Modal.setAppElement("#contingut-principal");},[]);
  useEffect(()=>{
    if(active===null)return;
    const onKey=(e:KeyboardEvent)=>{
