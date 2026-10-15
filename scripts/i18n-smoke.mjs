@@ -74,7 +74,8 @@ async function check(){
     const h=await response.text();
     const full=`https://cescjardiners.cat${url}`;
     assert(h.includes(`rel="canonical" href="${full}"`),`${url}: wrong canonical`);
-    assert(h.includes(`hreflang="ca"`) && h.includes(`hreflang="es"`) && h.includes(`hreflang="en"`),`${url}: missing hreflang`);
+    const lowerHtml=h.toLowerCase();
+    assert(lowerHtml.includes(`hreflang="ca"`) && lowerHtml.includes(`hreflang="es"`) && lowerHtml.includes(`hreflang="en"`),`${url}: missing hreflang`);
     assert(h.includes('"@type":"Service"'),`${url}: missing Schema.org Service`);
     assert(h.includes('<h1'),`${url}: missing H1`);
     for(const target of codes){
