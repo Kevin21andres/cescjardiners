@@ -99,9 +99,9 @@ async function check(){
     for(const item of fs.readdirSync(path,{withFileTypes:true})){
       const full=path+"/"+item.name;
       if(item.isDirectory())walk(full);
-      else if(/\\.(tsx?|jsx?)$/.test(item.name)){
+      else if(/[.](tsx?|jsx?)$/.test(item.name)){
         const code=fs.readFileSync(full,"utf8");
-        for(const match of code.matchAll(/["'](\\/images\\/[^"']+)["']/g)){
+        for(const match of code.matchAll(new RegExp(`["\x27](/images/[^"\x27]+)["\x27]`,"g"))){
           assert(fs.existsSync("public"+match[1]),`Asset missing: ${match[1]} in ${full}`);
           assetCount++;
         }
