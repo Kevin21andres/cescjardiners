@@ -32,9 +32,11 @@ export default function HeroVideo() {
   useEffect(() => {
     const video = videoRef.current;
     if (!allowed || !video) return;
+    let inView = false;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !document.hidden) {
+        inView = entry.isIntersecting;
+        if (inView && !document.hidden) {
           void video.play().catch(() => {});
         } else {
           video.pause();
@@ -44,7 +46,7 @@ export default function HeroVideo() {
     );
     const onVisibility = () => {
       if (document.hidden) video.pause();
-      else if (observer) void video.play().catch(() => {});
+      else if (inView) void video.play().catch(() => {});
     };
     observer.observe(video);
     document.addEventListener("visibilitychange", onVisibility);
