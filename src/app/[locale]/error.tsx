@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { RotateCcw } from "lucide-react";
 import { isLocale, type Locale } from "@/lib/i18n";
@@ -9,8 +9,7 @@ const strings={
   en:{title:"Something went wrong.",body:"We couldn't load this page. Please try again.",try:"Try again"},
 };
 export default function ErrorPage({error,reset}:{error:Error & {digest?:string};reset:()=>void}){
-  const params=useParams<{locale:string}>();
-  const requested=params?.locale ?? "ca";
+  const requested=(usePathname() ?? "").split("/")[1] ?? "ca";
   const locale:Locale=isLocale(requested)?requested:"ca";
   const t=strings[locale];
   useEffect(()=>{console.error("Cesc Jardiners route error", error.digest || error.name);},[error]);
