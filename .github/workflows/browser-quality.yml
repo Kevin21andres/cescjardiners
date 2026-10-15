@@ -1,0 +1,63 @@
+name: Browser and Lighthouse quality
+
+on:
+  push:
+    branches: ["feat/web-quality-seo-accessibility-20261015"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked application dependencies
+        run: npm ci
+      - name: Install isolated test tooling
+        run: npm install --no-save --package-lock=false playwright@1.55.0 axe-core@4.10.3 lighthouse@12.8.2
+      - name: Install Chromium for browser tests
+        run: npx playwright install --with-deps chromium
+      - name: Build production site
+        run: npm run build
+      - name: Browser, responsive, interaction, and WCAG audit
+        run: node scripts/browser-quality.mjs
+      - name: Upload UI screenshots and accessibility results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-quality-${{ github.run_id }}
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Lighthouse mobile and desktop (diagnostic)
+        if: success()
+        continue-on-error: true
+        shell: bash
+        run: |
+          npm run start -- -p 3401 > /tmp/cesc-next.log 2>&1 &
+          echo $! > /tmp/cesc-next.pid
+          for n in {1..40}; do
+            if curl -fsS http://127.0.0.1:3401/ca > /dev/null; then break; fi
+            sleep 1
+          done
+          export CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          mkdir -p reports/lighthouse
+          ./node_modules/.bin/lighthouse http://127.0.0.1:3401/ca --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path=reports/lighthouse/ca-mobile.json --quiet
+          ./node_modules/.bin/lighthouse http://127.0.0.1:3401/en --preset=desktop --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path=reports/lighthouse/en-desktop.json --quiet
+          node -e "const fs=require('fs');for(const f of ['ca-mobile','en-desktop']){const r=JSON.parse(fs.readFileSync('reports/lighthouse/'+f+'.json'));console.log(f,Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)])));}"
+          kill "$(cat /tmp/cesc-next.pid)" || true
+      - name: Upload Lighthouse metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ github.run_id }}
+          path: reports/lighthouse/
+          if-no-files-found: warn
+          retention-days: 14
