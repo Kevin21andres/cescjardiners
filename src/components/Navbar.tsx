@@ -1,183 +1,118 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
-import Image from "next/image";
-import React from "react";
+import { servicePages, serviceSlugs } from "@/lib/service-pages";
 
 const navItems = [
-  { label: "Inici", href: "/" },
-  { label: "Nosaltres", href: "/nosotros" },
-  { label: "Fotografies", href: "/fotografias" },
-  { label: "Contacte", href: "/contacto" },
+  { href: "/", label: "Inici" },
+  { href: "/nosotros", label: "Nosaltres" },
+  { href: "/fotografias", label: "Fotografies" },
+  { href: "/contacto", label: "Contacte" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [hovering, setHovering] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (!hovering) {
-      timeout = setTimeout(() => setShowDropdown(false), 200);
-    } else {
-      setShowDropdown(true);
-    }
-    return () => clearTimeout(timeout);
-  }, [hovering]);
+    setMobileOpen(false);
+    setMobileServicesOpen(false);
+    setServicesOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        setMobileServicesOpen(false);
+        setServicesOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onEscape);
+    return () => document.removeEventListener("keydown", onEscape);
+  }, []);
+
+  const current = (href: string) => pathname === href ? "page" as const : undefined;
+  const linkClass = (active: boolean) =>
+    `rounded-sm px-2 py-2 transition hover:text-green-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${active ? "text-green-300 underline underline-offset-8" : ""}`;
 
   return (
-    <nav
-      className="bg-black text-white sticky top-0 z-50 shadow-md border-b border-white/10"
-      role="navigation"
-      aria-label="Menú principal"
-    >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link
-          href="/"
-          aria-label="Cesc Jardiners - jardiner a Tarragona"
-          className="flex items-center gap-2"
-        >
-          <Image
-            src="/images/logocj.png"
-            alt="Logotip de Cesc Jardiners"
-            width={40}
-            height={40}
-            priority
-          />
+    <nav className="sticky top-0 z-50 border-b border-white/10 bg-slate-950 text-white shadow-lg" aria-label="Navegació principal">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3">
+        <Link href="/" aria-label="Cesc Jardiners, inici" className="flex min-w-0 items-center gap-3 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+          <Image src="/images/logocj.png" alt="" width={45} height={45} priority />
+          <span className="truncate text-lg font-bold tracking-tight">Cesc Jardiners</span>
         </Link>
 
-        {/* Botó mòbil */}
         <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden text-white"
-          aria-label={menuOpen ? "Tancar menú" : "Obrir menú"}
+          type="button"
+          onClick={() => setMobileOpen((open) => !open)}
+          aria-expanded={mobileOpen}
+          aria-controls="menu-mobil"
+          aria-label={mobileOpen ? "Tancar el menú" : "Obrir el menú"}
+          className="rounded-md p-2 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white md:hidden"
         >
-          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
 
-        {/* Menú escriptori */}
-        <ul className="hidden md:flex gap-6 text-sm font-medium tracking-wide items-center" role="menubar">
-          {navItems.map((item) => {
-            if (item.label === "Fotografies") {
-              return (
-                <React.Fragment key="serveis">
-                  {/* Serveis desplegable */}
-                  <li
-                    className="relative"
-                    onMouseEnter={() => setHovering(true)}
-                    onMouseLeave={() => setHovering(false)}
-                  >
-                    <Link
-                      href="/servicios"
-                      aria-haspopup="true"
-                      aria-expanded={showDropdown}
-                      className={`flex items-center gap-1 hover:text-brown-sugar ${
-                        pathname?.startsWith("/servicios") ? "underline underline-offset-4" : ""
-                      }`}
-                    >
-                      Serveis <ChevronDown className="w-4 h-4" />
-                    </Link>
-                    {showDropdown && (
-                      <div
-                        className="absolute top-full left-0 mt-2 bg-white text-black rounded shadow-md z-50"
-                        role="menu"
-                        tabIndex={-1}
-                      >
-                        <Link
-                          href="/servicios/montaje"
-                          className="block px-6 py-3 whitespace-nowrap hover:bg-forest-green hover:text-white transition-colors"
-                          title="Muntatge de jardins professionals"
-                        >
-                          Muntatge de jardins
-                        </Link>
-                      </div>
-                    )}
-                  </li>
-
-                  {/* Fotografies */}
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      title="Exemples de treballs de jardineria"
-                      className={`hover:text-brown-sugar ${
-                        pathname === item.href ? "underline underline-offset-4" : ""
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                </React.Fragment>
-              );
-            }
-
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  title={`${item.label} - Cesc Jardiners`}
-                  className={`hover:text-brown-sugar ${
-                    pathname === item.href ? "underline underline-offset-4" : ""
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="hidden items-center gap-4 text-sm font-semibold md:flex">
+          {navItems.slice(0, 2).map((item) => (
+            <Link key={item.href} href={item.href} aria-current={current(item.href)} className={linkClass(pathname === item.href)}>{item.label}</Link>
+          ))}
+          <div
+            className="relative"
+            onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setServicesOpen(false); }}
+          >
+            <button
+              type="button"
+              aria-expanded={servicesOpen}
+              aria-controls="submenu-serveis"
+              onClick={() => setServicesOpen((open) => !open)}
+              className={linkClass(pathname.startsWith("/servicios")) + " flex items-center gap-1"}
+            >
+              Serveis <ChevronDown aria-hidden="true" size={16} className={servicesOpen ? "rotate-180" : ""} />
+            </button>
+            {servicesOpen && (
+              <div id="submenu-serveis" className="absolute right-0 top-full mt-3 max-h-[70vh] min-w-64 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 text-slate-900 shadow-xl">
+                <Link href="/servicios" className="block rounded-lg px-4 py-2 font-semibold hover:bg-green-50">Tots els serveis</Link>
+                <Link href="/servicios/montaje" className="block rounded-lg px-4 py-2 hover:bg-green-50">Muntatge de jardins</Link>
+                {serviceSlugs.map((slug) => (
+                  <Link key={slug} href={`/servicios/${slug}`} className="block rounded-lg px-4 py-2 hover:bg-green-50">{servicePages[slug].title}</Link>
+                ))}
+              </div>
+            )}
+          </div>
+          {navItems.slice(2).map((item) => (
+            <Link key={item.href} href={item.href} aria-current={current(item.href)} className={linkClass(pathname === item.href)}>{item.label}</Link>
+          ))}
+        </div>
       </div>
-
-      {/* Menú mòbil */}
-      {menuOpen && (
-        <div className="md:hidden px-6 pb-6 space-y-4" aria-label="Menú per a dispositius mòbils">
-          {navItems.map((item) => {
-            if (item.label === "Fotografies") {
-              return (
-                <React.Fragment key="serveis-mob">
-                  <Link
-                    href="/servicios"
-                    title="Serveis de jardineria"
-                    className={`block text-sm font-medium hover:text-brown-sugar ${
-                      pathname?.startsWith("/servicios") ? "underline underline-offset-4" : ""
-                    }`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Serveis
-                  </Link>
-                  <Link
-                    href={item.href}
-                    title="Veure fotografies"
-                    className={`block text-sm font-medium hover:text-brown-sugar ${
-                      pathname === item.href ? "underline underline-offset-4" : ""
-                    }`}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                </React.Fragment>
-              );
-            }
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                title={`${item.label} - Cesc Jardiners`}
-                className={`block text-sm font-medium hover:text-brown-sugar ${
-                  pathname === item.href ? "underline underline-offset-4" : ""
-                }`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+      {mobileOpen && (
+        <div id="menu-mobil" className="border-t border-white/10 px-5 pb-5 pt-3 md:hidden">
+          <div className="flex flex-col gap-1">
+            {navItems.slice(0, 2).map((item) => (
+              <Link key={item.href} href={item.href} aria-current={current(item.href)} className="rounded-lg px-3 py-3 font-semibold hover:bg-white/10">{item.label}</Link>
+            ))}
+            <button type="button" aria-expanded={mobileServicesOpen} aria-controls="submenu-mobil-serveis" onClick={() => setMobileServicesOpen((open) => !open)} className="flex items-center justify-between rounded-lg px-3 py-3 text-left font-semibold hover:bg-white/10">
+              Serveis <ChevronDown aria-hidden="true" size={18} className={mobileServicesOpen ? "rotate-180" : ""} />
+            </button>
+            {mobileServicesOpen && (
+              <div id="submenu-mobil-serveis" className="ml-3 flex flex-col border-l border-white/20 pl-3">
+                <Link href="/servicios" className="rounded-lg px-3 py-2 hover:bg-white/10">Tots els serveis</Link>
+                <Link href="/servicios/montaje" className="rounded-lg px-3 py-2 hover:bg-white/10">Muntatge de jardins</Link>
+                {serviceSlugs.map((slug) => <Link key={slug} href={`/servicios/${slug}`} className="rounded-lg px-3 py-2 hover:bg-white/10">{servicePages[slug].title}</Link>)}
+              </div>
+            )}
+            {navItems.slice(2).map((item) => (
+              <Link key={item.href} href={item.href} aria-current={current(item.href)} className="rounded-lg px-3 py-3 font-semibold hover:bg-white/10">{item.label}</Link>
+            ))}
+          </div>
         </div>
       )}
     </nav>

@@ -137,13 +137,14 @@ export default function Nosotros() {
       >
         <h2 className="text-2xl md:text-3xl font-semibold mb-4">Vols saber més sobre nosaltres?</h2>
         <p className="mb-6">Estem aquí per ajudar-te amb qualsevol pregunta o projecte que tinguis en ment.</p>
-        <motion.button
+        <motion.a
+          href="/contacto"
           className="bg-white text-forest-green font-semibold py-2 px-6 rounded-full hover:bg-opacity-90 transition-colors duration-300"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           Contacta'ns
-        </motion.button>
+        </motion.a>
         <motion.div
           className="mt-4 text-sm opacity-0"
           animate={{ opacity: isHovered ? 1 : 0 }}

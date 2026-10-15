@@ -55,7 +55,7 @@ const SobreNosaltres = () => (
           width={600}
           height={400}
           className="rounded-xl shadow-inner object-cover w-full h-64 sm:h-80 md:h-72"
-          priority
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       </motion.div>
     </div>

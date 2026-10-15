@@ -1,47 +1,39 @@
-"use client";
-import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
+import HeroVideo from "./HeroVideo";
 
-const Hero = () => (
-  <section className="relative w-full min-h-[90vh] sm:min-h-screen flex items-center justify-center text-white overflow-hidden">
-    {/* Vídeo de fons */}
-    <video
-      className="absolute inset-0 w-full h-full object-cover z-0"
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="auto"
-      aria-hidden="true"
-    >
-      <source src="/video/fondohome.mp4" type="video/mp4" />
-      El teu navegador no suporta vídeos HTML5.
-    </video>
-
-    {/* Capa fosca sobre el vídeo */}
-    <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-black/50 z-10" />
-
-    {/* Contingut central */}
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1 }}
-      className="relative z-20 text-center px-4 sm:px-6 max-w-3xl mx-auto"
-    >
-      <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6 tracking-tight drop-shadow">
-        Cesc Jardiners
-      </h1>
-      <p className="text-base sm:text-xl md:text-2xl text-white/90 mb-8 drop-shadow">
-        Jardiners professionals a Tarragona i voltants. Disseny, muntatge i manteniment d'espais verds.
-      </p>
-      <Link
-        href="/contacto"
-        className="inline-block bg-brown-sugar hover:bg-white hover:text-brown-sugar transition font-semibold px-6 py-3 rounded-full shadow-lg text-sm sm:text-base md:text-lg"
-      >
-        Sol·licita el teu pressupost
-      </Link>
-    </motion.div>
-  </section>
-);
-
-export default Hero;
+export default function Hero() {
+  return (
+    <section className="relative isolate flex min-h-[76vh] w-full items-center justify-center overflow-hidden bg-slate-900 text-white sm:min-h-[86vh]" aria-labelledby="titol-inici">
+      <Image
+        src="/images/zona-jardi.webp"
+        alt=""
+        fill
+        sizes="100vw"
+        priority
+        className="object-cover"
+      />
+      <HeroVideo />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/65 to-black/40" aria-hidden="true" />
+      <div className="relative z-10 mx-auto max-w-4xl px-6 py-20 text-center">
+        <p className="mb-5 text-sm font-bold uppercase tracking-[0.2em] text-green-200 sm:text-base">
+          Disseny i manteniment de jardins
+        </p>
+        <h1 id="titol-inici" className="mb-6 text-5xl font-extrabold tracking-tight drop-shadow-lg sm:text-6xl lg:text-7xl">
+          Cesc Jardiners
+        </h1>
+        <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/95 sm:text-2xl">
+          Jardiners professionals a Tarragona i voltants. Disseny, muntatge i manteniment d'espais verds.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href="/contacto" className="rounded-full bg-brown-sugar px-7 py-3.5 font-bold text-white shadow-lg transition hover:bg-white hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            Sol·licita pressupost
+          </Link>
+          <Link href="/servicios" className="rounded-full border-2 border-white px-7 py-3.5 font-bold text-white transition hover:bg-white hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
+            Descobreix els serveis
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
