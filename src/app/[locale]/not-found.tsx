@@ -10,7 +10,7 @@ const descriptions={
   en:{heading:"This path doesn't lead anywhere.",text:"The page you're looking for doesn't exist or has moved.",link:"Back to the homepage"},
 };
 export default function NotFound(){
-  const {locale:requested}=useParams<{locale:string}>();
+  const requested=useParams<{locale:string}>()?.locale ?? "ca";
   const locale:Locale=isLocale(requested) ? requested : "ca";
   const t=descriptions[locale];
   return <section className="flex min-h-[65vh] items-center bg-warm-paper px-5 py-24 sm:px-10 lg:px-16">

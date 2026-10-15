@@ -10,7 +10,8 @@ const strings={
 };
 export default function ErrorPage({error,reset}:{error:Error & {digest?:string};reset:()=>void}){
   const params=useParams<{locale:string}>();
-  const locale:Locale=isLocale(params.locale)?params.locale:"ca";
+  const requested=params?.locale ?? "ca";
+  const locale:Locale=isLocale(requested)?requested:"ca";
   const t=strings[locale];
   useEffect(()=>{console.error("Cesc Jardiners route error", error.digest || error.name);},[error]);
   return <section className="flex min-h-[60vh] items-center bg-warm-paper px-5 py-24 sm:px-10">
