@@ -1,390 +1,102 @@
-import type {
-  NextApiRequest,
-  NextApiResponse,
-} from "next";
+import type {NextApiRequest, NextApiResponse} from "next";
 import nodemailer from "nodemailer";
+import {parseContactPayload,escapeHtml,isAllowedOrigin} from "@/lib/contact-validation";
+import {contactRateLimit} from "@/lib/contact-rate-limit";
 
-const RECAPTCHA_SECRET =
-  process.env.RECAPTCHA_SECRET;
-const SMTP_EMAIL = process.env.SMTP_EMAIL;
-const SMTP_PASS = process.env.SMTP_PASS;
+type RecaptchaResponse = {success?:boolean;hostname?:string;challenge_ts?:string;"error-codes"?:string[]};
+const hostnames=new Set((process.env.RECAPTCHA_ALLOWED_HOSTNAMES || "cescjardiners.cat,www.cescjardiners.cat,localhost")
+  .split(",").map(v=>v.trim().toLowerCase()).filter(Boolean));
 
-type RecaptchaVerificationResponse = {
-  success?: boolean;
-  challenge_ts?: string;
-  hostname?: string;
-  "error-codes"?: string[];
-};
+export const config={api:{bodyParser:{sizeLimit:"16kb"}}};
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "32kb",
-    },
-  },
-};
-
-function getString(
-  value: unknown,
-  maxLength: number,
-): string {
-  if (typeof value !== "string") {
-    return "";
-  }
-
-  return value.trim().slice(0, maxLength);
-}
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-    email,
-  );
-}
-
-async function verifyRecaptcha(
-  token: string,
-): Promise<boolean> {
-  if (!RECAPTCHA_SECRET) {
-    return false;
-  }
-
-  const params = new URLSearchParams({
-    secret: RECAPTCHA_SECRET,
-    response: token,
-  });
-
-  const controller = new AbortController();
-
-  const timeout = setTimeout(() => {
-    controller.abort();
-  }, 8000);
-
-  try {
-    const response = await fetch(
-      "https://www.google.com/recaptcha/api/siteverify",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/x-www-form-urlencoded",
-        },
-        body: params.toString(),
-        signal: controller.signal,
-        cache: "no-store",
-      },
-    );
-
-    if (!response.ok) {
-      console.error(
-        "Google reCAPTCHA ha retornat un estat HTTP no vàlid:",
-        response.status,
-      );
-
-      return false;
-    }
-
-    const data =
-      (await response.json()) as RecaptchaVerificationResponse;
-
-    if (!data.success) {
-      console.warn(
-        "Verificació reCAPTCHA rebutjada:",
-        data["error-codes"] ?? [],
-      );
-
-      return false;
-    }
-
+async function verifyRecaptcha(token:string):Promise<boolean>{
+  const secret=process.env.RECAPTCHA_SECRET;
+  if(!secret)return false;
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),7000);
+  try{
+    const response=await fetch("https://www.google.com/recaptcha/api/siteverify",{
+      method:"POST",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:new URLSearchParams({secret,response:token}),
+      signal:controller.signal,cache:"no-store",
+    });
+    if(!response.ok)return false;
+    const result=(await response.json()) as RecaptchaResponse;
+    if(!result.success || !result.hostname || !hostnames.has(result.hostname.toLowerCase()))return false;
+    // Google reCAPTCHA v2 tokens expire after two minutes.
+    const issuedAt=Date.parse(result.challenge_ts||"");
+    if(!Number.isFinite(issuedAt) || Date.now()-issuedAt>120000 || issuedAt-Date.now()>30000)return false;
     return true;
-  } finally {
-    clearTimeout(timeout);
-  }
+  }finally{clearTimeout(timer);}
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
-  res.setHeader("Cache-Control", "no-store");
-
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-
-    return res.status(405).json({
-      error: "Mètode no permès.",
-    });
+export default async function handler(req:NextApiRequest,res:NextApiResponse){
+  res.setHeader("Cache-Control","private, no-store, max-age=0");
+  res.setHeader("X-Content-Type-Options","nosniff");
+  if(req.method!=="POST"){
+    res.setHeader("Allow","POST");
+    return res.status(405).json({error:"Method not allowed"});
   }
-
-  if (
-    !RECAPTCHA_SECRET ||
-    !SMTP_EMAIL ||
-    !SMTP_PASS
-  ) {
-    console.error(
-      "Falten variables d'entorn necessàries per al formulari de contacte.",
-    );
-
-    return res.status(500).json({
-      error:
-        "La configuració del formulari no està disponible.",
-    });
+  if(!isAllowedOrigin(req.headers.origin,req.headers.host)){
+    return res.status(403).json({error:"Origin not allowed"});
   }
-
-  const nom = getString(
-    req.body?.nom,
-    100,
-  );
-
-  const email = getString(
-    req.body?.email,
-    254,
-  );
-
-  const telefon = getString(
-    req.body?.telefon,
-    30,
-  );
-
-  const codiPostal = getString(
-    req.body?.codiPostal,
-    15,
-  );
-
-  const missatge = getString(
-    req.body?.missatge,
-    5000,
-  );
-
-  const token = getString(
-    req.body?.token,
-    4096,
-  );
-
-  if (
-    !nom ||
-    !email ||
-    !missatge
-  ) {
-    return res.status(400).json({
-      error:
-        "Nom, correu electrònic i missatge són obligatoris.",
-    });
+  if(!["application/json","application/json; charset=utf-8"].includes(String(req.headers["content-type"]||"").toLowerCase())){
+    return res.status(415).json({error:"Unsupported media type"});
   }
-
-  if (!isValidEmail(email)) {
-    return res.status(400).json({
-      error:
-        "El correu electrònic no és vàlid.",
-    });
+  if(!process.env.RECAPTCHA_SECRET || !process.env.SMTP_EMAIL || !process.env.SMTP_PASS){
+    console.error("Contact form configuration is incomplete");
+    return res.status(503).json({error:"Contact temporarily unavailable"});
   }
-
-  if (!token) {
-    return res.status(400).json({
-      error:
-        "Falta el token de reCAPTCHA.",
-    });
+  let allowed;
+  try{
+    allowed=await contactRateLimit(req);
+  }catch{
+    console.error("Contact form rate limiter unavailable");
+    return res.status(503).json({error:"Contact temporarily unavailable"});
   }
-
-  try {
-    const recaptchaValid =
-      await verifyRecaptcha(token);
-
-    if (!recaptchaValid) {
-      return res.status(400).json({
-        error:
-          "Verificació reCAPTCHA fallida.",
-      });
-    }
-  } catch (error) {
-    console.error(
-      "Error verificant reCAPTCHA:",
-      error,
-    );
-
-    return res.status(500).json({
-      error:
-        "Error en verificar reCAPTCHA.",
-    });
+  res.setHeader("X-RateLimit-Limit","5");
+  if(!allowed.allowed){
+    res.setHeader("Retry-After",String(allowed.retryAfter));
+    return res.status(429).json({error:"Too many requests"});
   }
-
-  const safeNom =
-    escapeHtml(nom);
-
-  const safeEmail =
-    escapeHtml(email);
-
-  const safeTelefon =
-    escapeHtml(
-      telefon || "No indicat",
-    );
-
-  const safeCodiPostal =
-    escapeHtml(
-      codiPostal || "No indicat",
-    );
-
-  const safeMissatge =
-    escapeHtml(missatge).replace(
-      /\n/g,
-      "<br />",
-    );
-
-  // Evita salts de línia al subject.
-  const subjectName = nom
-    .replace(/[\r\n]+/g, " ")
-    .slice(0, 100);
-
-  try {
-    const transporter =
-      nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: SMTP_EMAIL,
-          pass: SMTP_PASS,
-        },
-      });
-
+  // No mail is sent for honeypot submissions; do not reveal it to the sender.
+  if(typeof req.body?.empresa==="string" && req.body.empresa.trim()){
+    return res.status(200).json({success:true});
+  }
+  const parsed=parseContactPayload(req.body);
+  if(!parsed.ok)return res.status(400).json({error:"Invalid contact data"});
+  const {nom,email,telefon,codiPostal,missatge,token,locale}=parsed.data;
+  try{
+    if(!await verifyRecaptcha(token))return res.status(400).json({error:"Invalid reCAPTCHA"});
+  }catch{
+    console.error("Contact form reCAPTCHA service unavailable");
+    return res.status(503).json({error:"Verification temporarily unavailable"});
+  }
+  const to=process.env.SMTP_EMAIL!;
+  const safeRows=[
+    ["Name",nom],["Email",email],["Phone",telefon||"—"],["Postcode",codiPostal||"—"],
+  ];
+  const markup=safeRows.map(([label,value])=>`<tr><th align="left" style="padding:8px">${label}</th><td style="padding:8px">${escapeHtml(value)}</td></tr>`).join("");
+  const text=`New website enquiry (language: ${locale})\n\n${safeRows.map(([label,value])=>`${label}: ${value}`).join("\n")}\n\nMessage:\n${missatge}`;
+  const transporter=nodemailer.createTransport({
+    service:"gmail",
+    auth:{user:to,pass:process.env.SMTP_PASS!},
+    connectionTimeout:7000,greetingTimeout:7000,socketTimeout:12000,
+  });
+  try{
     await transporter.sendMail({
-      from: `"Cesc Jardiners" <${SMTP_EMAIL}>`,
-      to: SMTP_EMAIL,
-      replyTo: email,
-      subject: `Nou missatge de ${subjectName}`,
-
-      text: [
-        "Nou missatge de Cesc Jardiners",
-        "",
-        `Nom: ${nom}`,
-        `Email: ${email}`,
-        `Telèfon: ${
-          telefon || "No indicat"
-        }`,
-        `Codi Postal: ${
-          codiPostal || "No indicat"
-        }`,
-        "",
-        "Missatge:",
-        missatge,
-      ].join("\n"),
-
-      html: `
-        <div
-          style="
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f9f9f9;
-          "
-        >
-          <h2 style="color: #22543d;">
-            Nou missatge de Cesc Jardiners
-          </h2>
-
-          <table
-            cellpadding="10"
-            style="
-              border-collapse: collapse;
-              width: 100%;
-              background: #ffffff;
-              border: 1px solid #dddddd;
-            "
-          >
-            <tr>
-              <td>
-                <strong>Nom:</strong>
-              </td>
-
-              <td>
-                ${safeNom}
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <strong>Email:</strong>
-              </td>
-
-              <td>
-                ${safeEmail}
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <strong>Telèfon:</strong>
-              </td>
-
-              <td>
-                ${safeTelefon}
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                <strong>Codi Postal:</strong>
-              </td>
-
-              <td>
-                ${safeCodiPostal}
-              </td>
-            </tr>
-
-            <tr>
-              <td
-                colspan="2"
-                style="
-                  border-top:
-                    1px solid #dddddd;
-                "
-              >
-                <strong>Missatge:</strong>
-
-                <br />
-
-                <p style="margin-top: 8px;">
-                  ${safeMissatge}
-                </p>
-              </td>
-            </tr>
-          </table>
-
-          <p
-            style="
-              font-size: 12px;
-              color: #666666;
-              margin-top: 20px;
-            "
-          >
-            Aquest correu ha estat enviat
-            automàticament des del formulari
-            de contacte de Cesc Jardiners.
-          </p>
-        </div>
-      `,
-
-      disableFileAccess: true,
-      disableUrlAccess: true,
+      from:{name:"Cesc Jardiners",address:to},
+      to,
+      replyTo:{name:nom,address:email},
+      subject:`Cesc Jardiners · ${nom.replace(/[\r\n]+/g," ").slice(0,90)}`,
+      text,
+      html:`<div style="font-family:Arial,sans-serif;max-width:650px"><h2>New website enquiry</h2><p>Language: ${locale}</p><table>${markup}</table><h3>Message</h3><p style="white-space:pre-wrap">${escapeHtml(missatge)}</p></div>`,
+      disableFileAccess:true,disableUrlAccess:true,
     });
-
-    return res.status(200).json({
-      success: true,
-    });
-  } catch (error) {
-    console.error(
-      "Error enviant el correu:",
-      error,
-    );
-
-    return res.status(500).json({
-      error:
-        "Error en enviar el correu.",
-    });
-  }
+    return res.status(200).json({success:true});
+  }catch{
+    console.error("Contact form email delivery failed");
+    return res.status(503).json({error:"Contact temporarily unavailable"});
+  }finally{transporter.close();}
 }

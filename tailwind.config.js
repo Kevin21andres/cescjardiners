@@ -1,17 +1,23 @@
-// tailwind.config.js
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-      "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    ],
-    theme: {
-      extend: {
-        colors: {
-          'forest-green': '#009D22',
-          'brown-sugar': '#BE6E46',
-          'slate-gray': '#7286A0',
-        },
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  theme: {
+    extend: {
+      colors: {
+        "forest-green": "#264D3E",
+        "deep-forest": "#122D24",
+        "brown-sugar": "#8B5738",
+        "slate-gray": "#596861",
+        "warm-paper": "#F8F6F0",
+        "warm-line": "#E8E4D9",
+      },
+      boxShadow: {
+        editorial: "0 18px 55px rgba(18,45,36,0.10)",
+      },
+      letterSpacing: {
+        editorial: "-0.045em",
       },
     },
-    plugins: [require('@tailwindcss/typography')],
-  };
-  
+  },
+  plugins: [],
+};

@@ -1,0 +1,33 @@
+name: Web quality
+
+on:
+  push:
+    branches: [main, "feat/web-quality-seo-accessibility-20261015"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Production dependency security gate
+        run: npm audit --omit=dev --audit-level=high
+      - name: Dependency audit report (includes build tools)
+        run: npm audit --audit-level=high || true
+      - name: Lint
+        run: npm run lint
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Security and validation unit tests
+        run: npm run test:unit
+      - name: Production build
+        run: npm run build
+      - name: Three-language route smoke test
+        run: npm run test:i18n
