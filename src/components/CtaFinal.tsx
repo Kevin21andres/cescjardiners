@@ -1,31 +1,27 @@
-"use client";
-import { motion } from "framer-motion";
 import Link from "next/link";
+import { ArrowUpRight, Phone } from "lucide-react";
 
-const CtaFinal = () => (
-  <section className="relative bg-gradient-to-tr from-forest-green to-brown-sugar text-white text-center py-16 sm:py-20 px-4 sm:px-6 mb-16 sm:mb-24">
-    <motion.div
-      initial={{ scale: 0.95, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      className="relative z-10"
-    >
-      <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-        Preparat per transformar el teu jardí?
-      </h3>
-      <p className="text-base sm:text-lg mb-6">
-        Demana pressupost gratuït i sense compromís avui mateix.
-      </p>
-      <Link
-        href="/contacto"
-        className="inline-block bg-white text-forest-green font-bold px-6 py-3 rounded-full hover:bg-opacity-90 transition"
-      >
-        Contactar ara
-      </Link>
-    </motion.div>
-    <div className="absolute w-60 h-60 sm:w-[300px] sm:h-[300px] bg-white/10 rounded-full blur-3xl -bottom-10 -right-10 z-0" />
-  </section>
-);
-
-export default CtaFinal;
+export default function CtaFinal() {
+  return (
+    <section className="bg-[#D6D8C7] px-5 py-24 sm:px-10 sm:py-32 lg:px-16" aria-labelledby="cta-title">
+      <div className="mx-auto max-w-[1320px]">
+        <div className="grid gap-12 lg:grid-cols-[1fr_250px] lg:items-end">
+          <div>
+            <p className="site-eyebrow mb-6 text-forest-green">05 / Comencem?</p>
+            <h2 id="cta-title" className="font-editorial max-w-[950px] text-[clamp(3.8rem,8.4vw,9.2rem)] leading-[.96] text-deep-forest">
+              El teu proper jardí<br /><span className="italic text-forest-green">comença aquí.</span>
+            </h2>
+          </div>
+          <div className="lg:pb-2">
+            <p className="mb-7 leading-8 text-[#3F5847]">Explica'ns què tens al cap. Ens encantaria formar part del teu projecte.</p>
+            <Link href="/contacto" className="group flex w-fit items-center gap-5 rounded-full bg-deep-forest py-3 pl-6 pr-3 text-sm font-bold text-white transition hover:bg-forest-green">
+              Demana pressupost
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-deep-forest transition group-hover:rotate-45"><ArrowUpRight size={18} aria-hidden="true" /></span>
+            </Link>
+            <a href="tel:+34638158473" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-forest-green hover:underline"><Phone size={15} aria-hidden="true" /> +34 638 15 84 73</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
