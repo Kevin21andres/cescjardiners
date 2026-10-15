@@ -168,7 +168,7 @@ export default function Contacte() {
           <div role="status" className="rounded-xl border border-green-200 bg-green-50 p-8 text-center">
             <h2 className="mb-3 text-2xl font-bold text-green-800">Missatge enviat correctament!</h2>
             <p className="text-green-900">Gràcies per contactar. Et respondrem ben aviat.</p>
-            <button type="button" onClick={() => { setSent(false); setPrivacyRead(false); window.grecaptcha?.reset(captchaWidgetId.current ?? undefined); }} className="mt-6 rounded-full bg-forest-green px-5 py-2 font-semibold text-white hover:bg-green-800">
+            <button type="button" onClick={() => { setSent(false); setPrivacyRead(false); setCaptchaEnabled(false); setCaptchaStatus("idle"); captchaWidgetId.current = null; }} className="mt-6 rounded-full bg-forest-green px-5 py-2 font-semibold text-white hover:bg-green-800">
               Enviar un altre missatge
             </button>
           </div>
