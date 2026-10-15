@@ -102,7 +102,7 @@ try{
   writeFileSync("reports/browser-quality.json",JSON.stringify({timestamp:new Date().toISOString(),results,issues},null,2));
   console.log(`PASS: ${results.length} browser/viewport/page combinations, footer, layout, images, language switch, gallery, CAPTCHA consent and API security. Axe findings: ${issues.length}`);
   const serious=issues.flatMap(x=>x.violations.filter(v=>v.impact==="serious").map(v=>({...v,location:`${x.locale}/${x.device}/${x.page}`})));
-  if(serious.length)console.warn("SERIOUS ACCESSIBILITY FINDINGS:",JSON.stringify(serious).slice(0,9000));
+  if(serious.length){console.error("SERIOUS ACCESSIBILITY FINDINGS:",JSON.stringify(serious).slice(0,12000));throw new Error(`${serious.length} WCAG serious violations detected`);}
 }catch(err){
   console.error(err);
   process.exitCode=1;

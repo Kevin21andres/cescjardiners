@@ -18,7 +18,7 @@ function LanguageLinks({locale,className=""}:{locale:Locale;className?:string}) 
         <Link key={target} href={routeFor(target,page)} hrefLang={target} lang={target}
           aria-current={locale===target?"page":undefined}
           aria-label={copy[target].languageName}
-          className={`rounded px-2 py-1.5 text-xs font-bold tracking-wider transition focus-visible:outline-2 ${locale===target?"bg-forest-green text-white":"text-deep-forest/60 hover:bg-[#E2E6DB] hover:text-deep-forest"}`}>
+          className={`rounded px-2 py-1.5 text-xs font-bold tracking-wider transition focus-visible:outline-2 ${locale===target?"bg-forest-green text-white":"text-deep-forest/80 hover:bg-[#E2E6DB] hover:text-deep-forest"}`}>
           {target.toUpperCase()}
         </Link>
       ))}
@@ -56,7 +56,7 @@ export function SiteHeader({locale}:{locale:Locale}) {
           <Image src="/images/logocj.png" alt="" width={45} height={45} className="h-11 w-11 object-contain" priority/>
           <span className="flex flex-col leading-none">
             <strong className="text-lg font-extrabold tracking-[-.045em] text-deep-forest sm:text-xl">Cesc Jardiners</strong>
-            <span className="mt-1.5 text-[.49rem] font-bold uppercase tracking-[.21em] text-brown-sugar">{t.footer.eyebrow}</span>
+            <span className="mt-1.5 text-[.65rem] font-bold uppercase tracking-[.21em] text-brown-sugar">{t.footer.eyebrow}</span>
           </span>
         </Link>
         <nav aria-label={t.nav.language+" · "+t.footer.links} className="hidden items-center gap-6 text-[.82rem] font-bold lg:flex xl:gap-9">
@@ -141,7 +141,7 @@ export function SiteFooter({locale}:{locale:Locale}) {
         </div>
         <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4 py-6 text-[.74rem] leading-5 text-white/55">
           <span>© {new Date().getFullYear()} Cesc Jardiners · {t.footer.rights}.</span>
-          <span className="hidden text-white/45 md:block">{t.footer.tagline}</span>
+          <span className="hidden text-white/70 md:block">{t.footer.tagline}</span>
           <nav aria-label={t.footer.legal} className="flex flex-wrap gap-5">
             <Link href={routeFor(locale,"legal")} className="hover:text-white">{t.footer.legal}</Link>
             <Link href={routeFor(locale,"privacy")} className="hover:text-white">{t.footer.privacy}</Link>

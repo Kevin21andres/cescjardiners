@@ -8,7 +8,7 @@
   --forest-dark: #122D24;
   --paper: #F8F6F0;
   --sand: #E8E4D9;
-  --terracotta: #AD7651;
+  --terracotta: #8B5738;
 }
 
 html {
@@ -52,7 +52,7 @@ button, a, input, textarea {
   -webkit-tap-highlight-color: transparent;
 }
 :focus-visible {
-  outline: 3px solid #AD7651;
+  outline: 3px solid #8B5738;
   outline-offset: 4px;
 }
 @media (prefers-reduced-motion: reduce) {
