@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig={
   reactStrictMode:true,
+  experimental:{globalNotFound:true},
   poweredByHeader:false,
   images:{formats:["image/avif","image/webp"]},
   async redirects(){
