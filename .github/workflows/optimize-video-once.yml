@@ -1,0 +1,26 @@
+name: One-shot hero video optimization
+on:
+  push:
+    branches: ["feat/web-quality-seo-accessibility-20261015"]
+permissions:
+  contents: write
+jobs:
+  optimize:
+    if: "github.event.head_commit.message == 'perf: optimize hero video with ffmpeg'"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Encode smaller, streaming-friendly MP4
+        run: |
+          if ! command -v ffmpeg; then sudo apt-get update && sudo apt-get install -y ffmpeg; fi
+          bash scripts/optimize-hero-video.sh
+      - name: Commit optimized video
+        run: |
+          if ! git diff --quiet -- public/video/fondohome.mp4; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/video/fondohome.mp4
+            git commit -m "perf(video): compress decorative hero background"
+            git push
+          fi
