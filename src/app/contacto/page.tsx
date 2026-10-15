@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, MapPin, MessageSquare, Phone, User } from "lucide-react";
 
 type RecaptchaApi = {
@@ -155,17 +156,39 @@ export default function Contacte() {
   };
 
   return (
-    <section className="bg-gradient-to-br from-green-50 via-white to-amber-50 px-5 py-16 sm:py-24">
-      <div className="mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white p-6 shadow-xl sm:p-12">
-        <h1 className="mb-4 text-center text-3xl font-extrabold text-forest-green sm:text-4xl">
-          Contacta amb nosaltres
-        </h1>
-        <p className="mb-10 text-center leading-relaxed text-slate-600">
-          Tens un projecte de jardineria? Explica'ns què necessites i et respondrem tan aviat com puguem.
-        </p>
+    <section className="bg-warm-paper px-5 py-20 sm:px-10 sm:py-28 lg:px-16">
+      <div className="mx-auto grid max-w-[1320px] gap-14 lg:grid-cols-[.85fr_1.15fr] lg:gap-20">
+        <aside>
+          <p className="site-eyebrow mb-6 text-brown-sugar">Tens una idea?</p>
+          <h1 className="font-editorial text-[clamp(3.8rem,6.4vw,7rem)] leading-[.98] text-deep-forest">
+            Fem-la <span className="italic text-forest-green">créixer.</span>
+          </h1>
+          <p className="mt-8 max-w-md text-lg leading-9 text-slate-gray">Tens un projecte de jardineria, vols cuidar un jardí o necessites informació? Explica'ns-ho i en parlem sense compromís.</p>
+          <div className="mt-12 border-t border-warm-line">
+            <a href="tel:+34638158473" className="flex items-start gap-4 border-b border-warm-line py-6 transition hover:text-brown-sugar">
+              <Phone size={19} className="mt-1 shrink-0" aria-hidden="true"/>
+              <span><strong className="block text-sm text-deep-forest">Truca'ns</strong><span className="mt-2 block text-slate-gray">+34 638 15 84 73</span></span>
+            </a>
+            <a href="mailto:cescjardiners@gmail.com" className="flex items-start gap-4 border-b border-warm-line py-6 transition hover:text-brown-sugar">
+              <Mail size={19} className="mt-1 shrink-0" aria-hidden="true"/>
+              <span><strong className="block text-sm text-deep-forest">Escriu-nos</strong><span className="mt-2 block break-all text-slate-gray">cescjardiners@gmail.com</span></span>
+            </a>
+            <div className="flex items-start gap-4 border-b border-warm-line py-6">
+              <MapPin size={19} className="mt-1 shrink-0" aria-hidden="true"/>
+              <span><strong className="block text-sm text-deep-forest">On treballem</strong><span className="mt-2 block text-slate-gray">Tarragona i voltants</span></span>
+            </div>
+          </div>
+          <div className="relative mt-12 hidden h-[350px] overflow-hidden lg:block">
+            <Image src="/images/seleccio-plantes.webp" alt="Selecció de plantes i vegetació per a jardins" fill sizes="40vw" className="object-cover"/>
+          </div>
+        </aside>
+        <div className="border border-warm-line bg-white p-6 shadow-editorial sm:p-9 xl:p-12">
+          <p className="site-eyebrow mb-4 text-brown-sugar">Formulari de contacte</p>
+          <h2 className="font-editorial mb-4 text-4xl text-deep-forest sm:text-5xl">Explica'ns el teu projecte.</h2>
+          <p className="mb-10 leading-8 text-slate-gray">Omple el formulari i et respondrem tan aviat com sigui possible.</p>
 
         {sent ? (
-          <div role="status" className="rounded-xl border border-green-200 bg-green-50 p-8 text-center">
+          <div role="status" className="border border-[#D3DACF] bg-[#ECF2E9] p-8 text-center">
             <h2 className="mb-3 text-2xl font-bold text-green-800">Missatge enviat correctament!</h2>
             <p className="text-green-900">Gràcies per contactar. Et respondrem ben aviat.</p>
             <button type="button" onClick={() => { setSent(false); setPrivacyRead(false); setCaptchaEnabled(false); setCaptchaStatus("idle"); captchaWidgetId.current = null; }} className="mt-6 rounded-full bg-forest-green px-5 py-2 font-semibold text-white hover:bg-green-800">
@@ -173,7 +196,7 @@ export default function Contacte() {
             </button>
           </div>
         ) : (
-          <form onSubmit={submit} className="space-y-6">
+          <form onSubmit={submit} className="space-y-7">
             <div className="grid gap-5 sm:grid-cols-2">
               {fields.map((field) => (
                 <div key={field.name}>
@@ -183,7 +206,7 @@ export default function Contacte() {
                     <input id={field.name} name={field.name} type={field.type} required={field.required}
                       maxLength={field.maxLength} autoComplete={field.autoComplete}
                       value={form[field.name]} onChange={change}
-                      className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 text-slate-950 placeholder:text-slate-500 focus:border-forest-green focus:outline-none focus:ring-2 focus:ring-green-200"
+                      className="w-full rounded-none border-0 border-b border-[#C5D0C3] bg-transparent py-3 pl-11 pr-4 text-slate-950 placeholder:text-slate-500 focus:border-forest-green focus:outline-none focus:ring-0"
                     />
                   </div>
                 </div>
@@ -196,7 +219,7 @@ export default function Contacte() {
                 <MessageSquare aria-hidden="true" className="absolute left-3 top-3.5 h-5 w-5 text-brown-sugar" />
                 <textarea name="missatge" id="missatge" required rows={5} maxLength={5000}
                   value={form.missatge} onChange={change}
-                  className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 text-slate-950 focus:border-forest-green focus:outline-none focus:ring-2 focus:ring-green-200"
+                  className="w-full rounded-none border-0 border-b border-[#C5D0C3] bg-transparent py-3 pl-11 pr-4 text-slate-950 focus:border-forest-green focus:outline-none focus:ring-0"
                 />
               </div>
             </div>
@@ -212,11 +235,11 @@ export default function Contacte() {
               <span>He llegit la <Link href="/politica-de-privacidad" className="font-semibold underline hover:text-forest-green">política de privacitat</Link> i entenc com es tractaran les meves dades.</span>
             </label>
 
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div className="border border-warm-line bg-[#F7F7F2] p-5">
               {!captchaEnabled ? (
                 <>
                   <p className="mb-3 text-sm text-slate-700">Per protegir el formulari contra el correu brossa, utilitzem Google reCAPTCHA. El servei només es carregarà si l'actives; Google pot tractar dades tècniques i utilitzar cookies. Consulta la <Link href="/politica-de-cookies" className="underline">informació sobre cookies</Link>.</p>
-                  <button type="button" onClick={activateCaptcha} className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-forest-green shadow-sm ring-1 ring-green-700 hover:bg-green-50">Activar verificació reCAPTCHA</button>
+                  <button type="button" onClick={activateCaptcha} className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-forest-green shadow-sm ring-1 ring-forest-green hover:bg-green-50">Activar verificació reCAPTCHA</button>
                 </>
               ) : (
                 <>
@@ -235,7 +258,7 @@ export default function Contacte() {
             {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700">{error}</p>}
 
             <button type="submit" disabled={sending || captchaStatus !== "ready"}
-              className="w-full rounded-full bg-brown-sugar px-7 py-3.5 font-bold text-white shadow-md transition hover:bg-forest-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-forest-green disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
+              className="w-full rounded-full bg-deep-forest px-8 py-4 font-bold text-white shadow-md transition hover:bg-forest-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-forest-green disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
               {sending ? "Enviant missatge…" : "Enviar missatge"}
             </button>
 
@@ -244,6 +267,7 @@ export default function Contacte() {
             </p>
           </form>
         )}
+        </div>
       </div>
     </section>
   );
