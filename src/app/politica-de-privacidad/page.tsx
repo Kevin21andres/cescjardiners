@@ -1,83 +1,34 @@
-"use client";
-
-import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function PoliticaPrivacitat() {
   return (
-    <section className="max-w-5xl mx-auto px-6 py-20 space-y-12">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl font-bold text-forest-green text-center"
-      >
-        Política de Privacitat
-      </motion.h1>
-
-      <div className="space-y-10 text-slate-700 text-base leading-relaxed">
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Compromís amb la teva privacitat</h2>
-          <p>
-            Som una empresa que valora la transparència i la protecció de les dades personals. Mitjançant aquesta política, t'informem de com recollim i tractem la teva informació.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Responsable del tractament</h2>
-          <ul className="list-disc pl-5">
-            <li><strong>Nom:</strong> Francisco Moreno Aguilar</li>
-            <li><strong>NIF:</strong> 52276597N</li>
-            <li><strong>Adreça:</strong> Ctra. Santas Creus, Km 14, Pol. 4, Parcela 33, 43765, La Secuita (Tarragona)</li>
-          </ul>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Dades que recollim</h2>
-          <p>
-            Recollim dades com el teu nom, correu electrònic, telèfon, codi postal i altres dades que ens proporcionis mitjançant formularis, subscripcions o comentaris.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Finalitats del tractament</h2>
-          <ul className="list-disc pl-5">
-            <li>Respondre consultes i sol·licituds d'informació</li>
-            <li>Gestió de subscripcions al butlletí</li>
-            <li>Tramitació de candidatures (CV)</li>
-            <li>Gestió de perfils d’usuari</li>
-            <li>Comentaris en el blog</li>
-          </ul>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Drets de l’usuari</h2>
-          <ul className="list-disc pl-5">
-            <li>Dret d'accés</li>
-            <li>Dret de rectificació</li>
-            <li>Dret d'oposició</li>
-            <li>Dret de supressió</li>
-            <li>Dret a la portabilitat</li>
-            <li>Dret a la limitació del tractament</li>
-          </ul>
-          <p className="mt-2">
-            Pots exercir aquests drets enviant un correu a <strong>cescjardiners@gmail.com</strong> o dirigint-te a l’adreça anteriorment indicada.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Temps de conservació</h2>
-          <p>
-            Les teves dades es conservaran durant el temps estrictament necessari per complir amb la finalitat per la qual es van recollir.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-brown-sugar mb-2">Compartició de dades</h2>
-          <p>
-            No compartim dades amb tercers llevat d'obligació legal o si és necessari per prestar el servei sol·licitat. No hi ha transferències internacionals previstes.
-          </p>
-        </div>
-      </div>
-    </section>
+    <article className="mx-auto max-w-3xl space-y-9 px-5 py-16 leading-relaxed text-slate-700 sm:py-24">
+      <h1 className="text-4xl font-extrabold text-forest-green">Política de privacitat</h1>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold text-slate-900">Responsable del tractament</h2>
+        <p>Francisco Moreno Aguilar · NIF 52276597N.</p>
+        <p>Ctra. Santas Creus, Km 14, Pol. 4, Parcela 33, 43765, La Secuita (Tarragona).</p>
+        <p>Contacte: <a href="mailto:cescjardiners@gmail.com" className="underline">cescjardiners@gmail.com</a>.</p>
+      </section>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold text-slate-900">Dades que recollim i finalitat</h2>
+        <p>Quan ens envies una consulta mitjançant el formulari, podem recollir el nom, l'adreça electrònica i el missatge. El telèfon i el codi postal són opcionals. Utilitzem aquestes dades exclusivament per atendre la consulta i, si ho demanes, preparar o gestionar un pressupost.</p>
+        <p>La base jurídica del tractament pot ser l'aplicació de mesures precontractuals sol·licitades per la persona interessada o, per a consultes generals, l'interès legítim d'atendre els missatges rebuts, segons el cas concret.</p>
+      </section>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold text-slate-900">Destinataris i serveis de tercers</h2>
+        <p>Els missatges del formulari s'envien al correu electrònic de Cesc Jardiners, que actualment utilitza infraestructura de Google. Per prevenir enviaments automatitzats, el formulari ofereix Google reCAPTCHA, que només s'activa si ho decideixes. Aquests serveis poden implicar tractaments de dades per part dels proveïdors i transferències internacionals subjectes a les garanties aplicables.</p>
+        <p>Consulta la <a className="underline" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacitat de Google</a> i la nostra <Link href="/politica-de-cookies" className="underline">informació sobre cookies</Link>.</p>
+      </section>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold text-slate-900">Conservació</h2>
+        <p>Conservarem les dades durant el temps necessari per respondre i gestionar la sol·licitud, així com durant els terminis addicionals que, si escau, exigeixi la normativa aplicable.</p>
+      </section>
+      <section className="space-y-3">
+        <h2 className="text-2xl font-bold text-slate-900">Drets de les persones interessades</h2>
+        <p>Pots sol·licitar l'accés, rectificació, supressió, oposició, limitació o portabilitat quan correspongui. Per exercir aquests drets, escriu a <a href="mailto:cescjardiners@gmail.com" className="underline">cescjardiners@gmail.com</a>. També pots presentar una reclamació davant l'autoritat de protecció de dades competent.</p>
+      </section>
+      <p className="border-t border-slate-200 pt-6 text-sm text-slate-500">Aquest text ha de validar-se amb el titular i, si escau, amb assessorament legal abans de publicar canvis substancials.</p>
+    </article>
   );
 }

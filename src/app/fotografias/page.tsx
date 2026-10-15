@@ -20,9 +20,10 @@ const images = [
   { src: "/images/retirada-arbre.webp", alt: "Retirada d'arbre" },
 ];
 
-Modal.setAppElement("body");
+
 
 export default function Fotografies() {
+  useEffect(() => { Modal.setAppElement("body"); }, []);
   const [modalOpen, setModalOpen] = useState(false);
   const [activeImage, setActiveImage] = useState<{ src: string; alt: string } | null>(null);
   useEffect(() => {
@@ -72,11 +73,13 @@ export default function Fotografies() {
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
       >
         {images.map((img, i) => (
-          <motion.div
+          <motion.button
+            type="button"
+            aria-label={`Ampliar fotografia: ${img.alt}`}
             key={i}
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden cursor-pointer"
+            className="w-full bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden cursor-pointer text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-forest-green"
             onClick={() => openModal(img)}
           >
             <div className="relative w-full aspect-[4/3]">
@@ -91,7 +94,7 @@ export default function Fotografies() {
             <div className="px-5 py-4 text-center">
               <h3 className="text-sm font-semibold text-brown-sugar">{img.alt}</h3>
             </div>
-          </motion.div>
+          </motion.button>
         ))}
       </motion.div>
 

@@ -16,6 +16,15 @@ type RecaptchaVerificationResponse = {
   "error-codes"?: string[];
 };
 
+// Confiem únicament en dominis configurats, mai en el header Host de la petició.
+const ALLOWED_RECAPTCHA_HOSTNAMES = new Set(
+  (process.env.RECAPTCHA_ALLOWED_HOSTNAMES ??
+    "cescjardiners.cat,www.cescjardiners.cat,cescjardiners.vercel.app,localhost")
+    .split(",")
+    .map((hostname) => hostname.trim().toLowerCase())
+    .filter(Boolean),
+);
+
 export const config = {
   api: {
     bodyParser: {
@@ -104,6 +113,11 @@ async function verifyRecaptcha(
       return false;
     }
 
+    if (!data.hostname || !ALLOWED_RECAPTCHA_HOSTNAMES.has(data.hostname.toLowerCase())) {
+      console.warn("Host reCAPTCHA no autoritzat.");
+      return false;
+    }
+
     return true;
   } finally {
     clearTimeout(timeout);
@@ -137,6 +151,11 @@ export default async function handler(
       error:
         "La configuració del formulari no està disponible.",
     });
+  }
+
+  // Honeypot: no es mostra a persones usuàries; evita enviar correu per a bots simples.
+  if (getString(req.body?.empresa, 200)) {
+    return res.status(200).json({ success: true });
   }
 
   const nom = getString(
