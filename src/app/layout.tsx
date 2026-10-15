@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Raleway } from "next/font/google";
 import Footer from "@/components/Footer";
 import FloatingWhatsapp from "@/components/floatingWhatsapp";
-import CookiesBanner from "@/components/CookiesBanner";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -11,69 +12,62 @@ const raleway = Raleway({
   display: "swap",
 });
 
-
-export const metadata = {
-  title: "Jardiner a Tarragona | Cesc Jardiners | Disseny i Manteniment de Jardins",
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Cesc Jardiners | Jardineria a Tarragona",
+    template: `%s | ${SITE_NAME}`,
+  },
   description:
-    "Cesc Jardiners ofereix serveis professionals de jardineria a Tarragona, Reus, Cambrils i voltants. Especialistes en manteniment de jardins, gespa artificial, poda i reg automàtic.",
-  keywords: [
-    "jardiner Tarragona",
-    "jardineria Reus",
-    "manteniment jardins Cambrils",
-    "paisatgisme Tarragona",
-    "gespa artificial",
-    "poda arbres Tarragona",
-    "reg automàtic",
-    "serveis jardiners",
-    "empresa jardineria tarragona",
-  ],
-  icons: {
-    icon: "/images/logocj.png",
-  },
-  openGraph: {
-    title: "Cesc Jardiners | Jardineria a Tarragona i voltants",
-    description:
-      "Serveis de jardineria de confiança a Tarragona. Disseny, manteniment i cura de jardins mediterranis. Demana pressupost avui mateix!",
-    url: "https://cescjardiners.cat",
-    siteName: "Cesc Jardiners",
-    images: [
-      {
-        url: "https://cescjardiners.cat/images/manteniment.webp", // Substitueix per la teva imatge
-        width: 1200,
-        height: 630,
-        alt: "Jardí mediterrani creat per Cesc Jardiners",
-      },
-    ],
-    locale: "ca_ES",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
-  },
-  alternates: {
-    canonical: "https://cescjardiners.cat",
-  },
+    "Disseny, muntatge i manteniment de jardins a Tarragona, Reus, Cambrils i voltants. Demana pressupost a Cesc Jardiners.",
+  applicationName: SITE_NAME,
+  icons: { icon: "/images/logocj.png" },
+  robots: { index: true, follow: true },
 };
 
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${SITE_URL}/#empresa`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  image: `${SITE_URL}/images/zona-jardi.webp`,
+  logo: `${SITE_URL}/images/logocj.png`,
+  email: "cescjardiners@gmail.com",
+  telephone: "+34638158473",
+  description: "Disseny, muntatge i manteniment de jardins i piscines a Tarragona i voltants.",
+  areaServed: [
+    { "@type": "Place", name: "Tarragona" },
+    { "@type": "Place", name: "Reus" },
+    { "@type": "Place", name: "Cambrils" },
+    { "@type": "Place", name: "Salou" },
+  ],
+  sameAs: [
+    "https://www.instagram.com/cesc.jardiners/",
+    "https://www.tiktok.com/@cescjardiners",
+  ],
+};
 
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ca">
-      <body className={`${raleway.className} bg-white text-black`}>
+      <body className={`${raleway.className} bg-white text-slate-950`}>
+        <a
+          href="#contingut-principal"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-3 focus:text-black focus:shadow-xl"
+        >
+          Salta al contingut principal
+        </a>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(localBusiness).replace(/</g, "\\u003c"),
+          }}
+        />
         <Navbar />
-        <main className="max-w-7xl mx-auto px-4">{children}</main>
+        <main id="contingut-principal">{children}</main>
         <FloatingWhatsapp />
-        <CookiesBanner/>
-        <div className="mt-24">
-          <Footer />
-        </div>
+        <Footer />
       </body>
     </html>
   );

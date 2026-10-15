@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cesc Jardiners — web corporativa
 
-## Getting Started
+Web en català de **Cesc Jardiners**, desenvolupada amb Next.js (App Router), TypeScript i Tailwind CSS.
 
-First, run the development server:
+## Requisits
+
+- Node.js compatible amb la versió de Next.js indicada a `package.json`
+- npm
+- Compte de Vercel o servidor compatible per desplegar Next.js
+
+## Inici ràpid
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visita http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verificacions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
 
-## Learn More
+## Formulari de contacte
 
-To learn more about Next.js, take a look at the following resources:
+La ruta `/api/contact` utilitza Nodemailer i Google reCAPTCHA v2. Configura les variables **només al servidor**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```dotenv
+RECAPTCHA_SECRET=
+SMTP_EMAIL=
+SMTP_PASS=
+# Opcional: hostnames separats per comes
+RECAPTCHA_ALLOWED_HOSTNAMES=cescjardiners.cat,www.cescjardiners.cat,cescjardiners.vercel.app,localhost
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+La **site key pública** de reCAPTCHA es troba al component de contacte. Registra a Google els dominis on s'utilitzi el widget. No incloguis les claus secretes al repositori ni utilitzis variables `NEXT_PUBLIC_` per a secrets.
 
-## Deploy on Vercel
+reCAPTCHA es carrega únicament després que el visitant activi la verificació. El sistema d'enviament evita injecció HTML al cos del correu, limita la mida de la petició i valida les dades al servidor. Per mitigar el correu brossa a escala, configura també limitació de peticions al proveïdor de desplegament (WAF/rate limiting).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## SEO i publicació
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Les metadades es defineixen a `src/lib/seo.ts` i als layouts de ruta.
+- `/sitemap.xml` i `/robots.txt` són generats per Next.js.
+- El domini canònic configurat és https://cescjardiners.cat.
+- La web incorpora dades estructurades `LocalBusiness`.
+
+## Notes per a la posada en producció
+
+- Verifica que el domini, correu, telèfon, serveis i dades legals són correctes.
+- Revisa jurídicament els textos de privacitat, cookies i avís legal segons els serveis de tercers reals del desplegament.
+- Comprova el funcionament de reCAPTCHA i SMTP a l'entorn de Vercel abans de publicar.
+- Mesura Core Web Vitals i accessibilitat en dispositius reals.
+- No incorporis cookies d'analítica/publicitat sense implantar el consentiment corresponent.
