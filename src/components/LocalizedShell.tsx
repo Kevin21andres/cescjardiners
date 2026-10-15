@@ -52,11 +52,11 @@ export function SiteHeader({locale}:{locale:Locale}) {
   return (
     <header className="sticky top-0 z-50 border-b border-[#E6E1D5] bg-[#FAF8F2]/95 shadow-[0_4px_24px_rgba(18,45,36,.035)] backdrop-blur-xl">
       <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 sm:h-[84px] sm:px-10 lg:px-16">
-        <Link href={routeFor(locale,"home")} aria-label="Cesc Jardiners" className="flex shrink-0 items-center gap-3">
-          <Image src="/images/logocj.png" alt="" width={45} height={45} className="h-11 w-11 object-contain" priority/>
-          <span className="flex flex-col leading-none">
-            <strong className="text-lg font-extrabold tracking-[-.045em] text-deep-forest sm:text-xl">Cesc Jardiners</strong>
-            <span className="mt-1.5 text-[.65rem] font-bold uppercase tracking-[.21em] text-brown-sugar">{t.footer.eyebrow}</span>
+        <Link href={routeFor(locale,"home")} aria-label="Cesc Jardiners" className="flex min-w-0 items-center gap-3">
+          <Image src="/images/logocj.png" alt="" width={45} height={45} className="h-11 w-11 shrink-0 object-contain" priority/>
+          <span className="flex min-w-0 flex-col leading-none">
+            <strong className="truncate text-lg font-extrabold tracking-[-.045em] text-deep-forest sm:text-xl">Cesc Jardiners</strong>
+            <span title={t.footer.eyebrow} className="mt-1.5 max-w-[170px] truncate text-[.62rem] font-bold uppercase tracking-[.13em] text-brown-sugar sm:max-w-none">{t.footer.eyebrow}</span>
           </span>
         </Link>
         <nav aria-label={t.nav.language+" · "+t.footer.links} className="hidden items-center gap-6 text-[.82rem] font-bold lg:flex xl:gap-9">
@@ -82,7 +82,7 @@ export function SiteHeader({locale}:{locale:Locale}) {
           </Link>
         </div>
         <button type="button" aria-label={open?t.nav.close:t.nav.menu} aria-expanded={open} aria-controls="localized-mobile-nav"
-          onClick={()=>setOpen(!open)} className="ml-auto rounded-full border border-warm-line bg-white p-3 text-deep-forest lg:hidden">
+          onClick={()=>setOpen(!open)} className="relative z-10 ml-auto shrink-0 rounded-full border border-warm-line bg-white p-3 text-deep-forest lg:hidden">
           {open?<X size={22} aria-hidden="true"/>:<Menu size={22} aria-hidden="true"/>}
         </button>
       </div>
