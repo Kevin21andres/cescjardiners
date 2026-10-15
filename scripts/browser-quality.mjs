@@ -63,6 +63,9 @@ try{
         results.push({locale,device:device.label,page:item.name,metrics,axeViolations:axe.length});
       }
       if(device.label==="mobile"){
+        // Avoid a transient sticky-header overlap after the footer screenshot.
+        await page.evaluate(() => window.scrollTo({top:0,behavior:"instant"}));
+        await page.waitForTimeout(150);
         const button=page.getByRole("button",{name:/Obrir menú|Abrir menú|Open menu/});
         await button.click();
         assert(await page.locator("#localized-mobile-nav").isVisible(),"Mobile menu did not open");
