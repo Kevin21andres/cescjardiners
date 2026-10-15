@@ -1,113 +1,53 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { Droplet, Sprout, TreePalm, Ruler } from "lucide-react"; // npm install lucide-react
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
-const serveis = [
-  {
-    icon: <Sprout className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/seleccio-plantes.webp",
-    alt: "Selecció de plantes",
-    title: "Selecció de plantes",
-    text: "Triem espècies adaptades al clima, el tipus de sòl i les preferències estètiques de cada client.",
-  },
-  {
-    icon: <Ruler className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/instalacio-gespa1.webp",
-    alt: "Instal·lació de gespa",
-    title: "Instal·lació de gespa",
-    text: "Instal·lem gespa natural o artificial amb una preparació acurada del terreny i un acabat professional.",
-  },
-  {
-    icon: <TreePalm className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/tot-tipus.webp",
-    alt: "Plantació de vegetació",
-    title: "Plantació de tot tipus",
-    text: "Plantem arbres, arbustos, flors i tanques vegetals segons el projecte i l’estil desitjat.",
-  },
-  {
-    icon: <Droplet className="text-forest-green w-6 h-6 mb-3 mx-auto" />,
-    img: "/images/instalacio-reg.webp",
-    alt: "Instal·lació de reg",
-    title: "Instal·lació de reg",
-    text: "Sistemes de reg automàtic i eficient per optimitzar l’ús d’aigua i garantir la salut del jardí.",
-  },
+const parts=[
+  {name:"Selecció de plantes",image:"/images/seleccio-plantes.webp",text:"Espècies adaptades al clima, al tipus de sòl i als gustos de cada client."},
+  {name:"Instal·lació de gespa",image:"/images/instalacio-gespa1.webp",text:"Gespa natural o artificial, amb una preparació del terreny acurada."},
+  {name:"Plantació de vegetació",image:"/images/tot-tipus.webp",text:"Arbres, arbustos, flors i altres elements vegetals segons cada projecte."},
+  {name:"Sistemes de reg",image:"/images/instalacio-reg.webp",text:"Instal·lacions adaptades a les plantes i a les necessitats del jardí."},
 ];
-
-export default function MontatgeJardins() {
+export default function MontatgeJardins(){
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20 space-y-16">
-      {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="text-center"
-      >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-forest-green mb-4 tracking-tight">
-          Muntatge de jardins
-        </h1>
-        <p className="text-lg text-slate-gray max-w-3xl mx-auto leading-relaxed">
-          A Cesc Jardiners ens encarreguem de complir totes les teves necessitats relacionades amb el jardí. Des del disseny personalitzat amb plànols i eines tecnològiques, fins a la selecció de materials clau per crear un espai verd funcional, estètic i durador.
-        </p>
-      </motion.header>
-
-      {/* Descripció */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        viewport={{ once: true }}
-        className="text-slate-gray text-base leading-relaxed space-y-6 max-w-4xl mx-auto"
-      >
-        <p>
-          Per garantir un resultat òptim, treballem amb un pressupost clar i detallat que s’adapta als teus objectius. La nostra experiència i professionalitat ens permeten oferir solucions eficients i resultats que superen expectatives.
-        </p>
-        <p>
-          A continuació, et mostrem alguns dels elements clau que formen part del nostre servei de muntatge:
-        </p>
-      </motion.div>
-
-      {/* Llistat de serveis */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
-        {serveis.map(({ img, alt, title, text, icon }, i) => (
-          <motion.article
-            key={i}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.02, boxShadow: "0px 8px 24px rgba(0,0,0,0.08)" }}
-            transition={{ duration: 0.5 + i * 0.1 }}
-            viewport={{ once: true }}
-            className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-          >
-            <div className="relative w-full h-64 sm:h-72">
-              <Image
-                src={img}
-                alt={`Imatge de servei: ${alt}`}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-6 text-center">
-              {icon}
-              <h3 className="text-xl font-semibold text-brown-sugar mb-2">{title}</h3>
-              <p className="text-slate-gray">{text}</p>
-            </div>
-          </motion.article>
-        ))}
-      </div>
-
-      {/* Call to Action */}
-      <div className="text-center pt-8">
-        <a
-          href="/contacto"
-          className="inline-block px-6 py-3 bg-forest-green text-white font-medium rounded-full shadow-md hover:bg-green-700 transition"
-        >
-          Demana pressupost
-        </a>
-      </div>
-    </section>
+    <>
+      <section className="bg-warm-paper px-5 pb-20 pt-12 sm:px-10 sm:pb-28 lg:px-16">
+        <div className="mx-auto max-w-[1320px]">
+          <nav aria-label="Ruta de navegació" className="mb-12 text-xs font-semibold uppercase tracking-widest text-slate-gray">
+            <Link href="/">Inici</Link><span className="mx-3">/</span><Link href="/servicios">Serveis</Link><span className="mx-3">/</span><span aria-current="page" className="text-forest-green">Muntatge</span>
+          </nav>
+          <p className="site-eyebrow mb-6 text-brown-sugar">Disseny i creació</p>
+          <h1 className="font-editorial max-w-[1050px] text-[clamp(3.7rem,8vw,8.6rem)] leading-[.96] text-deep-forest">Jardins creats per <span className="italic text-forest-green">sentir.</span></h1>
+          <p className="mt-8 max-w-2xl text-lg leading-9 text-slate-gray">Dissenyem i executem espais verds tenint en compte cada necessitat: materials, vegetació, gespa i sistemes de reg.</p>
+          <Link href="/contacto" className="mt-9 inline-flex items-center gap-3 rounded-full bg-deep-forest px-7 py-4 text-sm font-bold text-white transition hover:bg-forest-green">Parlem del teu projecte <ArrowUpRight size={18} aria-hidden="true"/></Link>
+          <div className="relative mt-16 h-[420px] overflow-hidden bg-[#CAD5C8] sm:h-[680px]">
+            <Image src="/images/muntatge.webp" alt="Muntatge de jardins de Cesc Jardiners" fill sizes="100vw" priority className="object-cover"/>
+          </div>
+        </div>
+      </section>
+      <section className="bg-white px-5 py-24 sm:px-10 sm:py-32 lg:px-16">
+        <div className="mx-auto max-w-[1320px]">
+          <p className="site-eyebrow mb-6 text-brown-sugar">Tot comença amb una idea</p>
+          <h2 className="font-editorial mb-16 max-w-4xl text-[clamp(3.3rem,6vw,6.5rem)] leading-[1.01] text-deep-forest">Cada element té el seu <span className="italic text-forest-green">sentit.</span></h2>
+          <div className="grid gap-x-7 gap-y-14 md:grid-cols-2">
+            {parts.map((item,index)=>(
+              <article key={item.name}>
+                <div className="relative mb-6 h-[350px] overflow-hidden bg-[#D8DFD4] sm:h-[440px]">
+                  <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                </div>
+                <div className="flex gap-5">
+                  <span className="font-editorial text-2xl italic text-brown-sugar">0{index+1}</span>
+                  <div><h3 className="font-editorial text-3xl text-deep-forest sm:text-4xl">{item.name}</h3><p className="mt-3 max-w-md leading-7 text-slate-gray">{item.text}</p></div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="bg-[#D6D8C7] px-5 py-24 text-center sm:px-10">
+        <h2 className="font-editorial mx-auto max-w-4xl text-5xl text-deep-forest sm:text-7xl">Comencem a <span className="italic">imaginar?</span></h2>
+        <Link href="/contacto" className="mt-9 inline-flex items-center gap-3 rounded-full bg-deep-forest px-7 py-4 text-sm font-bold text-white hover:bg-forest-green">Demana pressupost <ArrowUpRight size={18} aria-hidden="true"/></Link>
+      </section>
+    </>
   );
 }

@@ -1,130 +1,101 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
+import { ArrowLeft, ArrowRight, Expand, X } from "lucide-react";
 
-const images = [
-  { src: "/images/manteniment.webp", alt: "Projecte de jardí" },
-  { src: "/images/manteniment-piscines.webp", alt: "Piscina envoltada de gespa" },
-  { src: "/images/manteniment-comunitat.webp", alt: "Manteniment de comunitat" },
-  { src: "/images/zona-jardi.webp", alt: "Zona enjardinada mediterrània" },
-  { src: "/images/poda-comunitat.webp", alt: "Detall de poda i cura" },
-  { src: "/images/gespa.webp", alt: "Disseny de jardí modern" },
-  { src: "/images/piscina-detall.webp", alt: "Detall de piscina neta" },
-  { src: "/images/escocell.webp", alt: "Escocell net i ordenat" },
-  { src: "/images/entrada-jardi.webp", alt: "Entrada jardí" },
-  { src: "/images/jardi-entrada.webp", alt: "Entrada enjardinada elegant" },
-  { src: "/images/equip.webp", alt: "Equip de treball en acció" },
-  { src: "/images/retirada-arbre.webp", alt: "Retirada d'arbre" },
+const projects = [
+  { src: "/images/zona-jardi.webp", title: "Jardí mediterrani", category: "Jardins", featured: true },
+  { src: "/images/manteniment-piscines.webp", title: "Espais d'aigua", category: "Piscines", featured: false },
+  { src: "/images/entrada-jardi.webp", title: "Benvinguda natural", category: "Jardins", featured: false },
+  { src: "/images/manteniment-comunitat.webp", title: "Verd compartit", category: "Comunitats", featured: true },
+  { src: "/images/piscina-detall.webp", title: "Detalls que importen", category: "Piscines", featured: true },
+  { src: "/images/poda-comunitat.webp", title: "Cura dels arbres", category: "Manteniment", featured: false },
+  { src: "/images/gespa.webp", title: "Jardins per gaudir", category: "Jardins", featured: false },
+  { src: "/images/escocell.webp", title: "Petits detalls", category: "Manteniment", featured: true },
+  { src: "/images/jardi-entrada.webp", title: "Un nou paisatge", category: "Jardins", featured: true },
+  { src: "/images/equip.webp", title: "La feina de cada dia", category: "Equip", featured: false },
+  { src: "/images/retirada-arbre.webp", title: "Treballs de jardineria", category: "Manteniment", featured: false },
+  { src: "/images/manteniment.webp", title: "Cuidant cada espai", category: "Jardins", featured: true },
 ];
 
-
-
 export default function Fotografies() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   useEffect(() => { Modal.setAppElement("body"); }, []);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [activeImage, setActiveImage] = useState<{ src: string; alt: string } | null>(null);
+
+  const showPrevious = () => setActiveIndex((index) => index === null ? null : (index-1+projects.length)%projects.length);
+  const showNext = () => setActiveIndex((index) => index === null ? null : (index+1)%projects.length);
+
   useEffect(() => {
-  document.body.style.overflow = modalOpen
-    ? "hidden"
-    : "";
+    if (activeIndex === null) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") showNext();
+      if (event.key === "ArrowLeft") showPrevious();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [activeIndex]);
 
-  return () => {
-    document.body.style.overflow = "";
-  };
-}, [modalOpen]);
-
-  const openModal = (img: { src: string; alt: string }) => {
-    setActiveImage(img);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setActiveImage(null);
-  };
+  const activeImage = activeIndex === null ? null : projects[activeIndex];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20 space-y-16">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="text-center"
-      >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-forest-green mb-6 tracking-tight">
-          Fotografies dels nostres treballs
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Aquí pots veure una selecció de jardins, zones verdes i espais que hem transformat amb passió i professionalitat.
-        </p>
-      </motion.div>
-
-      {/* Galeria */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-      >
-        {images.map((img, i) => (
-          <motion.button
-            type="button"
-            aria-label={`Ampliar fotografia: ${img.alt}`}
-            key={i}
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="w-full bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden cursor-pointer text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-forest-green"
-            onClick={() => openModal(img)}
-          >
-            <div className="relative w-full aspect-[4/3]">
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-300 hover:scale-105 hover:brightness-90"
-              />
-            </div>
-            <div className="px-5 py-4 text-center">
-              <h3 className="text-sm font-semibold text-brown-sugar">{img.alt}</h3>
-            </div>
-          </motion.button>
-        ))}
-      </motion.div>
-
-      {/* Modal */}
-      <Modal
-        isOpen={modalOpen}
-        onRequestClose={closeModal}
-        className="fixed inset-0 flex items-center justify-center z-50 outline-none"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-80 transition-opacity duration-300 z-40"
-        closeTimeoutMS={200}
-      >
-        <div className="relative w-[92vw] max-w-5xl max-h-[90vh] overflow-auto rounded-xl shadow-lg">
-          <button
-            onClick={closeModal}
-            className="absolute top-3 right-3 text-white text-3xl bg-black/50 hover:bg-black/70 rounded-full px-3 py-1"
-            aria-label="Tancar imatge"
-          >
-            &times;
-          </button>
-          {activeImage && (
-            <Image
-              src={activeImage.src}
-              alt={activeImage.alt}
-              width={1200}
-              height={800}
-              className="w-full h-auto rounded-xl"
-            />
-          )}
+    <>
+      <section className="bg-deep-forest px-5 pb-20 pt-20 text-white sm:px-10 sm:pb-28 sm:pt-28 lg:px-16">
+        <div className="mx-auto max-w-[1320px]">
+          <p className="site-eyebrow mb-7 text-[#D3B38D]">Una mirada a la nostra feina</p>
+          <h1 className="font-editorial max-w-5xl text-[clamp(4.3rem,8.8vw,9.5rem)] leading-[.94]">Natura que <span className="italic text-[#C9D6C4]">emociona.</span></h1>
+          <p className="mt-8 max-w-2xl text-lg leading-8 text-white/75">Una selecció d'espais verds, jardins i piscines que hem ajudat a cuidar i transformar.</p>
         </div>
+      </section>
+
+      <section className="bg-warm-paper px-5 py-20 sm:px-10 sm:py-28 lg:px-16" aria-label="Galeria de treballs de Cesc Jardiners">
+        <div className="mx-auto grid max-w-[1320px] gap-5 sm:grid-cols-2 lg:gap-7">
+          {projects.map((project,index)=>(
+            <button
+              type="button"
+              key={project.src}
+              onClick={()=>setActiveIndex(index)}
+              aria-label={`Ampliar fotografia: ${project.title}`}
+              className={`group relative block w-full overflow-hidden bg-[#C3CCC0] text-left ${project.featured?"sm:row-span-1":""}`}
+            >
+              <div className={`relative overflow-hidden ${project.featured ? "h-[350px] sm:h-[510px]" : "h-[350px] sm:h-[420px]"}`}>
+                <Image src={project.src} alt={project.title+" — Cesc Jardiners"} fill sizes="(max-width: 640px) 100vw, 50vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+                <span className="site-eyebrow absolute left-6 top-6 text-white/90">{project.category}</span>
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 sm:p-9">
+                  <h2 className="font-editorial text-3xl text-white sm:text-4xl">{project.title}</h2>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/70 text-white transition group-hover:bg-white group-hover:text-deep-forest"><Expand size={17} aria-hidden="true"/></span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <Modal isOpen={activeIndex !== null} onRequestClose={()=>setActiveIndex(null)}
+        ariaHideApp={true} contentLabel={activeImage ? `Fotografia ampliada: ${activeImage.title}` : "Fotografia ampliada"}
+        shouldCloseOnOverlayClick
+        className="relative mx-auto flex h-[100dvh] max-w-7xl flex-col items-center justify-center px-4 py-12 outline-none sm:px-20"
+        overlayClassName="fixed inset-0 z-[100] overflow-y-auto bg-[#071A13]/95 backdrop-blur-lg">
+        <button type="button" onClick={()=>setActiveIndex(null)} aria-label="Tancar fotografia" className="absolute right-4 top-4 z-20 rounded-full border border-white/40 p-3 text-white transition hover:bg-white hover:text-deep-forest sm:right-8 sm:top-8"><X size={24} aria-hidden="true" /></button>
+        {activeImage && (
+          <>
+            <div className="relative h-[65dvh] w-full max-w-5xl">
+              <Image src={activeImage.src} alt={activeImage.title} fill sizes="90vw" className="object-contain" priority />
+            </div>
+            <div className="mt-5 flex w-full max-w-5xl items-center justify-between gap-3 text-white">
+              <button type="button" onClick={showPrevious} aria-label="Fotografia anterior" className="rounded-full border border-white/40 p-3 hover:bg-white/20"><ArrowLeft size={22} aria-hidden="true" /></button>
+              <div className="text-center">
+                <p className="font-editorial text-xl sm:text-3xl">{activeImage.title}</p>
+                <p className="mt-1 text-xs text-white/60">{(activeIndex ?? 0)+1} / {projects.length}</p>
+              </div>
+              <button type="button" onClick={showNext} aria-label="Fotografia següent" className="rounded-full border border-white/40 p-3 hover:bg-white/20"><ArrowRight size={22} aria-hidden="true" /></button>
+            </div>
+          </>
+        )}
       </Modal>
-    </section>
+    </>
   );
 }
