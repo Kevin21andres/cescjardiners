@@ -6,7 +6,7 @@ import { SiteFooter, SiteHeader, SiteWhatsapp } from "@/components/LocalizedShel
 import { copy, isLocale, locales, routeFor } from "@/lib/i18n";
 import { SITE_URL } from "@/lib/seo";
 
-const raleway=Raleway({subsets:["latin"],weight:["300","400","500","600","700","800"],display:"swap"});
+const raleway=Raleway({subsets:["latin"],display:"swap"});
 type Props={children:React.ReactNode;params:Promise<{locale:string}>};
 
 export const dynamicParams=false;

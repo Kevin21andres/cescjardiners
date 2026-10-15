@@ -3,7 +3,8 @@ const nextConfig={
   reactStrictMode:true,
   experimental:{globalNotFound:true},
   poweredByHeader:false,
-  images:{formats:["image/avif","image/webp"]},
+  // WebP is already the format of our source assets; avoid slow cold AVIF encoding.
+  images:{formats:["image/webp"]},
   async redirects(){
     return [
       {source:"/",destination:"/ca",permanent:true},
