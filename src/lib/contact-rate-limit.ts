@@ -36,7 +36,7 @@ export async function contactRateLimit(req: NextApiRequest): Promise<RateResult>
   const url=process.env.UPSTASH_REDIS_REST_URL;
   const token=process.env.UPSTASH_REDIS_REST_TOKEN;
   if(!url || !token) {
-    if(process.env.RATE_LIMIT_REQUIRED === "true") throw new Error("rate-limit-not-configured");
+    if(process.env.RATE_LIMIT_REQUIRED === "true" || process.env.VERCEL_ENV === "production") throw new Error("rate-limit-not-configured");
     return localLimit(key);
   }
 

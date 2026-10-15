@@ -55,6 +55,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     console.error("Contact form rate limiter unavailable");
     return res.status(503).json({error:"Contact temporarily unavailable"});
   }
+  res.setHeader("X-RateLimit-Limit","5");
   if(!allowed.allowed){
     res.setHeader("Retry-After",String(allowed.retryAfter));
     return res.status(429).json({error:"Too many requests"});

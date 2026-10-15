@@ -10,7 +10,7 @@ The production branch is `main`; work is reviewed in a Pull Request and deployed
 - Strict lengths and formats; no silent truncation of user input.
 - reCAPTCHA v2 token checked server-side against an explicit hostname list and maximum challenge age.
 - Honeypot, server-side rate limit (5 requests per client in 10 minutes), bounded payload and timeouts.
-- Shared rate limiting requires **Upstash Redis REST**; without it, local memory is an inadequate fallback for multi-instance serverless deployment. Set `RATE_LIMIT_REQUIRED=true` after providing `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`.
+- Shared rate limiting requires **Upstash Redis REST**; without it, local memory is an inadequate fallback for multi-instance serverless deployment. Production on Vercel is **fail-closed** without Redis, regardless of `RATE_LIMIT_REQUIRED`. Configure `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, and `RATE_LIMIT_KEY_SECRET` in production before merging. For staging deployments, set `RATE_LIMIT_REQUIRED=true` after configuring Redis.
 - An HMAC of the connection IP is used as a limiter key, not the raw IP. Use `RATE_LIMIT_KEY_SECRET`.
 - Explicitly configure Vercel WAF / rate limiting and error alerting in the hosting console. Code does not replace a WAF.
 - SMTP and anti-spam credentials must only be Vercel **server-side** environment variables. Do not log tokens, IPs, email payloads, or secrets.
