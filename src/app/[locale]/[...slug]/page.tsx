@@ -6,7 +6,8 @@ import { notFound } from "next/navigation";
 import LocalizedContactForm from "@/components/LocalizedContactForm";
 import LocalizedGallery from "@/components/LocalizedGallery";
 import { copy, isLocale, locales, pageForPath, pageIds, paths, routeFor, serviceIds, serviceImages, type Locale, type PageId, type ServiceId } from "@/lib/i18n";
-import { localizedMetadata } from "@/lib/seo-localized";
+import { localizedMetadata, localizedUrl } from "@/lib/seo-localized";
+import { SITE_URL } from "@/lib/seo";
 
 type Props={params:Promise<{locale:string;slug:string[]}>};
 
@@ -72,7 +73,19 @@ function Services({locale}:{locale:Locale}){
 
 function Detail({locale,id}:{locale:Locale;id:ServiceId}){
   const t=copy[locale],s=t.service[id];
+  const serviceSchema = {
+    "@context":"https://schema.org",
+    "@type":"Service",
+    name:s.title,
+    description:s.intro,
+    serviceType:s.title,
+    inLanguage:locale,
+    url:localizedUrl(locale,id),
+    provider:{"@id":`${SITE_URL}/#company`},
+    areaServed:[{"@type":"Place",name:"Tarragona"},{"@type":"Place",name:"Reus"},{"@type":"Place",name:"Cambrils"}],
+  };
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(serviceSchema).replace(/</g,"\\u003c")}}/>
     <section className="bg-warm-paper px-5 pb-20 pt-12 sm:px-10 sm:pb-28 lg:px-16">
       <div className="mx-auto max-w-[1320px]">
         <nav aria-label={t.nav.services} className="mb-12 text-sm text-slate-gray">

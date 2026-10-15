@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, ChevronDown, Instagram, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import { FaTiktok, FaWhatsapp } from "react-icons/fa";
-import { copy, isLocale, locales, pageForPath, routeFor, type Locale, type PageId } from "@/lib/i18n";
+import { copy, locales, pageForPath, routeFor, type Locale, type PageId } from "@/lib/i18n";
 
 function LanguageLinks({locale,className=""}:{locale:Locale;className?:string}) {
   const pathname = usePathname() ?? routeFor(locale,"home");
@@ -31,9 +31,10 @@ export function SiteHeader({locale}:{locale:Locale}) {
   const pathname=usePathname();
   const [open,setOpen]=useState(false);
   const [serviceOpen,setServiceOpen]=useState(false);
-  useEffect(()=>{setOpen(false);setServiceOpen(false);},[pathname]);
+  const [mobileServiceOpen,setMobileServiceOpen]=useState(false);
+  useEffect(()=>{setOpen(false);setServiceOpen(false);setMobileServiceOpen(false);},[pathname]);
   useEffect(()=>{
-    const escape=(e:KeyboardEvent)=>{if(e.key==="Escape"){setOpen(false);setServiceOpen(false);}};
+    const escape=(e:KeyboardEvent)=>{if(e.key==="Escape"){setOpen(false);setServiceOpen(false);setMobileServiceOpen(false);}};
     document.addEventListener("keydown",escape);
     return ()=>document.removeEventListener("keydown",escape);
   },[]);
@@ -58,7 +59,7 @@ export function SiteHeader({locale}:{locale:Locale}) {
             <span className="mt-1.5 text-[.49rem] font-bold uppercase tracking-[.21em] text-brown-sugar">{t.footer.eyebrow}</span>
           </span>
         </Link>
-        <nav aria-label={t.nav.menu} className="hidden items-center gap-6 text-[.82rem] font-bold lg:flex xl:gap-9">
+        <nav aria-label={t.nav.language+" · "+t.footer.links} className="hidden items-center gap-6 text-[.82rem] font-bold lg:flex xl:gap-9">
           {mainLinks.slice(0,2).map(item=><Link href={routeFor(locale,item.id)} key={item.id} aria-current={pathname===routeFor(locale,item.id)?"page":undefined}
             className="text-deep-forest/80 transition hover:text-brown-sugar">{item.label}</Link>)}
           <div className="relative" onBlur={(event)=>{if(!event.currentTarget.contains(event.relatedTarget))setServiceOpen(false);}}>
@@ -85,11 +86,11 @@ export function SiteHeader({locale}:{locale:Locale}) {
           {open?<X size={22} aria-hidden="true"/>:<Menu size={22} aria-hidden="true"/>}
         </button>
       </div>
-      {open&&<nav id="localized-mobile-nav" aria-label={t.nav.menu} className="max-h-[calc(100svh-76px)] overflow-y-auto border-t border-warm-line bg-[#FAF8F2] px-5 pb-7 pt-4 sm:px-10 lg:hidden">
+      {open&&<nav id="localized-mobile-nav" aria-label={t.footer.links} className="max-h-[calc(100svh-76px)] overflow-y-auto border-t border-warm-line bg-[#FAF8F2] px-5 pb-7 pt-4 sm:px-10 lg:hidden">
         {mainLinks.slice(0,2).map(item=><Link key={item.id} href={routeFor(locale,item.id)} className="block border-b border-warm-line py-4 font-bold text-deep-forest">{item.label}</Link>)}
-        <button type="button" aria-expanded={serviceOpen} aria-controls="mobile-services-localized" onClick={()=>setServiceOpen(!serviceOpen)}
-          className="flex w-full items-center justify-between border-b border-warm-line py-4 text-left font-bold text-deep-forest">{t.nav.services}<ChevronDown size={18} aria-hidden="true"/></button>
-        {serviceOpen&&<div id="mobile-services-localized" className="bg-[#F0EEE6] px-4 py-2">
+        <button type="button" aria-expanded={mobileServiceOpen} aria-controls="mobile-services-localized" onClick={()=>setMobileServiceOpen(!mobileServiceOpen)}
+          className="flex min-h-12 w-full items-center justify-between border-b border-warm-line py-4 text-left font-bold text-deep-forest">{t.nav.services}<ChevronDown size={18} aria-hidden="true"/></button>
+        {mobileServiceOpen&&<div id="mobile-services-localized" className="bg-[#F0EEE6] px-4 py-2">
           {serviceLinks.map(item=><Link key={item.id} href={routeFor(locale,item.id)} className="block py-3 text-sm text-deep-forest">{item.label}</Link>)}
         </div>}
         <Link href={routeFor(locale,"gallery")} className="block border-b border-warm-line py-4 font-bold text-deep-forest">{t.nav.projects}</Link>
@@ -160,7 +161,7 @@ export function SiteWhatsapp({locale}:{locale:Locale}) {
     href={`https://wa.me/34638158473?text=${encodeURIComponent(msg)}`}
     target="_blank" rel="noopener noreferrer"
     aria-label={`WhatsApp — ${copy[locale].nav.contact}`}
-    className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-green-700 text-white shadow-xl transition hover:scale-105 hover:bg-green-800">
+    className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-40 flex h-12 w-12 items-center justify-center rounded-full bg-green-700 text-white shadow-xl transition hover:scale-105 hover:bg-green-800">
     <FaWhatsapp size={23} aria-hidden="true"/>
   </a>;
 }
