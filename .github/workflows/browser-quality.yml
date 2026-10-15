@@ -50,7 +50,7 @@ jobs:
           mkdir -p reports/lighthouse
           ./node_modules/.bin/lighthouse http://127.0.0.1:3401/ca --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path=reports/lighthouse/ca-mobile.json --quiet
           ./node_modules/.bin/lighthouse http://127.0.0.1:3401/en --preset=desktop --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --output=json --output-path=reports/lighthouse/en-desktop.json --quiet
-          node -e "const fs=require('fs');for(const f of ['ca-mobile','en-desktop']){const r=JSON.parse(fs.readFileSync('reports/lighthouse/'+f+'.json'));console.log(f,Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)])));}"
+          node scripts/report-lighthouse.mjs
           kill "$(cat /tmp/cesc-next.pid)" || true
       - name: Upload Lighthouse metrics
         if: always()
