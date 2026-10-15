@@ -73,3 +73,24 @@ npm run test:i18n
 ```
 
 **Important per al formulari:** configura `RECAPTCHA_ALLOWED_HOSTNAMES` amb els noms de domini reals de producció i de la previsualització autoritzats per Google. No utilitzis el comodí ni desactivis la verificació del hostname. Comprova SMTP amb un enviament de prova abans del desplegament.
+
+## Seguretat en producció (obligatori abans del merge)
+
+La configuració sense secrets no és suficient per garantir la seguretat del formulari.
+
+1. Variables de Vercel: `RECAPTCHA_SECRET`, `SMTP_EMAIL`, `SMTP_PASS` i `RECAPTCHA_ALLOWED_HOSTNAMES`. Verifica que el domini de Preview autoritzat coincideix amb el que Google rep realment (el hostname de reCAPTCHA **no** inclou el protocol).
+2. Límit de peticions **compartit entre instàncies**: afegeix `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` i un secret aleatori `RATE_LIMIT_KEY_SECRET`. Configura `RATE_LIMIT_REQUIRED=true` per **bloquejar l'enviament** quan Redis no estigui configurat. Sense Redis, el projecte utilitza un limitador local en memòria que NO és suficient en un despliegament serverless distribuït.
+3. Configura també un WAF / rate limiting a Vercel per reduir càrrega i bots abans d'arribar al servidor. Revisa la quota i les alertes del proveïdor de correu.
+4. Fes un enviament real al formulari des de `/ca/contacte`, `/es/contacto` i `/en/contact`: revisa lliurament, Spam, `reply-to` i errors de reCAPTCHA. Aquesta prova necessita accés als serveis externs i no es pot simular en CI.
+5. Revisa i aprova amb el titular les dades comercials i legals, cookies / reCAPTCHA, tractament de dades, conservació i transferències internacionals abans de la publicació.
+
+El formulari valida longituds i formats, origen, tipus de contingut, reCAPTCHA (host i temps de validesa), incorpora honeypot, límit de sol·licituds i evita injectar HTML o capçaleres de correu a partir de l'entrada. La política CSP permet scripts inline de Next.js per compatibilitat amb el renderitzat estàtic: **no és una CSP estricta basada en nonces**. Cal valorar una migració separada si es canvia la política de renderització.
+
+## Auditoria de qualitat
+
+```bash
+npm run test:unit
+npm run test:i18n
+```
+
+El workflow `Browser and Lighthouse quality` executa Playwright/Chromium amb diferents mides de pantalla, revisió WCAG amb axe-core, captures de pantalla, comprovacions del formulari sense enviar correus reals i auditories Lighthouse. Els resultats es guarden com a artefactes de GitHub Actions. Les puntuacions Lighthouse poden variar segons el maquinari i no substitueixen Core Web Vitals de visitants reals.
