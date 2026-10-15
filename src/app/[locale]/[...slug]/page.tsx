@@ -11,7 +11,7 @@ import { SITE_URL } from "@/lib/seo";
 
 type Props={params:Promise<{locale:string;slug:string[]}>};
 
-export const dynamicParams=false;
+export const dynamicParams=true;
 export function generateStaticParams(){
   return locales.flatMap(locale=>pageIds.filter(id=>id!=="home").map(id=>({
     locale,slug:paths[locale][id].split("/"),
