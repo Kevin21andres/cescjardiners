@@ -75,8 +75,10 @@ try{
   const ctx=await browser.newContext({viewport:{width:1280,height:800},reducedMotion:"reduce"});
   const page=await ctx.newPage();
   await page.goto(origin+"/ca/serveis/manteniment-jardins");
-  await page.getByRole("navigation",{name:"Idioma",exact:true}).getByRole("link",{name:"English",exact:true}).click();
-  assert(page.url().endsWith("/en/services/garden-maintenance"),"Language switch did not preserve service");
+  const englishLink=page.getByRole("navigation",{name:"Idioma",exact:true}).getByRole("link",{name:"English",exact:true});
+  assert.equal(await englishLink.getAttribute("href"),"/en/services/garden-maintenance","The selector must link to the same service");
+  await englishLink.click();
+  await page.waitForURL("**/en/services/garden-maintenance",{timeout:15000});
   await page.goto(origin+"/en/projects");
   await page.getByRole("button",{name:/Enlarge photograph/}).first().click();
   assert(await page.getByRole("dialog").isVisible(),"Gallery modal not opened");
