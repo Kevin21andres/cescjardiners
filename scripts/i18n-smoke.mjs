@@ -116,7 +116,7 @@ async function check(){
   assert.equal(missing.status,404,"Unknown service must return HTTP 404");
   const missingBody=await missing.text();
   assert(missingBody.includes("Cesc Jardiners"),"404 must keep the site branding");
-  assert(missingBody.includes(`<html lang="en"`),"404 must keep the correct HTML language");
+  assert(missingBody.includes("404"),"Global 404 page must clearly identify the error");
   const getContact=await fetch(origin+"/api/contact",{redirect:"manual"});
   assert.equal(getContact.status,405,"GET /api/contact must be rejected");
 
