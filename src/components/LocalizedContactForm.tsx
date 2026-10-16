@@ -57,6 +57,7 @@ export default function LocalizedContactForm({locale}:{locale:Locale}){
   async function submit(event:FormEvent<HTMLFormElement>){
     event.preventDefault();
     setError("");
+    if(form.missatge.trim().length<8){setError(t.messageTooShort);return;}
     if(!policy){setError(t.policyRequired);return;}
     const token=window.grecaptcha?.getResponse(widget.current??undefined);
     if(!token){setError(t.captchaMissing);return;}
@@ -74,6 +75,8 @@ export default function LocalizedContactForm({locale}:{locale:Locale}){
       window.grecaptcha?.reset(widget.current??undefined);
     }finally{window.clearTimeout(timeout);setSending(false);}
   }
+  const messageLength=form.missatge.trim().length;
+  const messageIsShort=form.missatge.length>0 && messageLength<8;
   const fields=[
     {name:"nom",label:t.name,type:"text",required:true,max:100,complete:"name"},
     {name:"email",label:t.email,type:"email",required:true,max:254,complete:"email"},
@@ -100,8 +103,13 @@ export default function LocalizedContactForm({locale}:{locale:Locale}){
       </div>
       <div>
         <label htmlFor="missatge" className="mb-2 block text-sm font-bold text-deep-forest">{t.message}</label>
-        <textarea id="missatge" name="missatge" rows={5} maxLength={5000} required value={form.missatge} onChange={change}
+        <textarea id="missatge" name="missatge" rows={5} minLength={8} maxLength={5000} required value={form.missatge} onChange={change}
+          aria-describedby="missatge-hint" aria-invalid={messageIsShort || undefined}
           className="w-full border-0 border-b border-[#C5D0C3] bg-transparent px-1 py-3 text-deep-forest focus:border-forest-green focus:outline-none focus:ring-0"/>
+        <p id="missatge-hint" className={`mt-2 flex flex-wrap justify-between gap-2 text-xs ${messageIsShort ? "text-red-700" : "text-slate-gray"}`}>
+          <span>{messageIsShort?t.messageTooShort:t.messageHint}</span>
+          <span aria-label={`${messageLength} / 8`}>{messageLength} / 8</span>
+        </p>
       </div>
       <div className="absolute -left-[10000px]" aria-hidden="true"><label htmlFor="empresa">Leave blank</label><input id="empresa" name="empresa" tabIndex={-1} autoComplete="off" value={form.empresa} onChange={change}/></div>
       <label className="flex items-start gap-3 text-sm leading-7 text-slate-gray">

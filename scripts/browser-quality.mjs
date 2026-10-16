@@ -89,6 +89,14 @@ try{
   assert(!(await page.getByRole("dialog").isVisible()),"Gallery modal did not close on Escape");
 
   await page.goto(origin+"/en/contact");
+  const messageInput=page.locator('textarea[name="missatge"]');
+  assert.equal(await messageInput.getAttribute("minlength"),"8","Message must declare an 8-character minimum");
+  assert((await page.locator("#missatge-hint").textContent())?.includes("At least 8 characters."),"English minimum length hint missing");
+  await messageInput.fill("short");
+  assert.equal(await messageInput.getAttribute("aria-invalid"),"true","Short message must be marked invalid");
+  assert((await page.locator("#missatge-hint").textContent())?.includes("Please enter a message"),"Localized short-message hint missing");
+  await messageInput.fill("Testing a valid message");
+  assert.equal(await messageInput.getAttribute("aria-invalid"),null,"Valid message must clear the invalid state");
   assert.equal(await page.locator('script[src*="recaptcha"]').count(),0,"reCAPTCHA loads without opt-in");
   await page.getByRole("button",{name:"Enable reCAPTCHA verification"}).click();
   await page.waitForTimeout(200);
